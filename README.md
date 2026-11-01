@@ -119,3 +119,34 @@ The app is not yet store-approved. Google Play and Apple require developer accou
 - Hijri date display is algorithmic and is not an official moon-sighting declaration.
 - Quran content should retain source attribution; validate text and translations before adding additional editions.
 - AI must not be presented as a qualified scholar or a source of authoritative fatwas.
+
+
+## Sabily Super-App modules
+
+The member app is organised into worship, learning, community, wellbeing and giving experiences.
+
+- **Member roles:** member, creator, moderator, admin and super-admin. Server-side role changes are restricted to super-admin.
+- **Contribution levels:** member ranks and badges are based on transparent contribution/Noor ledger signals, not a judgement of faith.
+- **Media centre:** published shorts, long-form video, podcasts, lessons and quizzes are loaded from `sabily_content`.
+- **Knowledge library:** Hadith, Seerah, Fiqh, Islamic knowledge and stories. Religious entries require source attribution and editorial review.
+- **AI content studio:** creator-only drafts via the `sabily-ai` Edge Function. Drafts are unpublished; the `sabily-admin` function requires admin approval before publication.
+- **Quizzes:** short interactive knowledge checks with per-user attempt history.
+- **Digital wellbeing:** finite sessions and private habit check-ins for screen time, smoking cessation support, sleep and personal digital boundaries. This is not medical treatment.
+- **Admin studio:** acquisition programme records for Meta, Google, Apple Search Ads and influencer affiliates; in-app placement controls; OAuth provider readiness; member directory; editorial queue.
+- **Moderation:** private report submission and a moderator review queue.
+- **Mini apps:** a single route into worship, Quran, learning, community, rewards and wellbeing tools.
+
+### Important integration boundaries
+
+The admin studio stores configuration and operational records; it does not by itself launch Meta/Google/Apple campaigns, settle affiliate commissions, activate OAuth providers, send push notifications, process donations or deliver in-app ad inventory. Those require provider credentials, callback configuration, billing/legal approval and runtime integrations.
+
+OAuth client secrets and AI provider keys must remain in Supabase Auth / Edge Function secrets, never in browser-visible settings. Quran, worship, fatwa and prayer experiences are excluded from promotional placements. Religious knowledge and AI-assisted drafts must be source-checked by qualified editors before publication.
+
+### New Supabase tables
+
+- `sabily_quiz_attempts`
+- `sabily_habit_checkins`
+- `sabily_content_interactions`
+- `sabily_affiliate_partners`
+
+All new user activity tables use Row Level Security and user-scoped policies. The matching SQL is in `supabase/migrations/20261101135000_sabily_superapp_quiz_wellbeing_affiliates.sql`.
