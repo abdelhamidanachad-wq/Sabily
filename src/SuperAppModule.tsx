@@ -66,7 +66,8 @@ function MemberCard({userId,displayName}:{userId:string;displayName:string}){
  return <Card className="member-rank-card"><div className="member-rank-top"><div className="rank-emblem"><Award size={30}/></div><div><span className="eyebrow">MEMBER LEVEL</span><h2>{rank.name}</h2><p>Welcome, {displayName}. Keep learning and helping.</p></div><span className="member-points">{points} Noor</span></div><div className="rank-progress"><span style={{width:(rank.next?Math.min(100,points/(points+rank.next)*100):100)+"%"}}/></div><small>{rank.next?rank.next+" points to the next level":"Highest current level"}</small><div className="member-contrib-grid"><div><b>{posts}</b><small>Forum posts</small></div><div><b>{comments}</b><small>Helpful replies</small></div><div><b>{badges.length}</b><small>Earned badges</small></div></div><div className="member-badges">{badges.length?badges.map(b=><span key={b}><BadgeCheck size={14}/>{b}</span>):<small>Your first helpful contribution can earn a badge.</small>}</div></Card>
 }
 export default function SuperAppModule({page,userId,role,displayName,onToast,onNavigate}:Props){
- if(page==="Content Centre")return <ContentCentre onToast={onToast}/>;\n if(page==="Content Studio")return <ContentStudio userId={userId} onToast={onToast}/>;
+ if(page==="Content Centre")return <ContentCentre onToast={onToast}/>;
+ if(page==="Content Studio")return <ContentStudio userId={userId} onToast={onToast}/>;
  if(page==="Knowledge")return <Knowledge/>;
  if(page==="Quizzes")return <Quiz userId={userId} onToast={onToast}/>;
  if(page==="Digital Wellbeing")return <Detox userId={userId} onToast={onToast}/>;
