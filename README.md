@@ -63,7 +63,7 @@ New signups receive the `member` role. The exact owner email `abdel@sabily.io` r
 
 The earlier `202611010001_sabily_ecosystem_core.sql` file is a historical audit marker for the legacy project, not a bootstrap migration. Do not run it on a fresh project.
 
-The new SABILY project currently has no Edge Functions deployed. The Admin AI studio therefore remains unavailable until the `sabily-ai` function is deployed and a provider secret is configured server-side (for example `AI_GATEWAY_API_KEY` or `OPENAI_API_KEY`). Never use a `VITE_` prefix for provider secrets.
+The JWT-protected `sabily-ai` Edge Function is deployed to the new SABILY project and its source is versioned in `supabase/functions/sabily-ai/`. It records AI draft jobs and returns a clear configuration error until a provider secret is added server-side (for example `AI_GATEWAY_API_KEY` or `OPENAI_API_KEY`). Never use a `VITE_` prefix for provider secrets. The broader `sabily-admin` function and its moderation/settings workflows have not yet been migrated.
 
 ## Vercel
 
