@@ -1,6 +1,6 @@
 import {useEffect,useState,type FormEvent} from "react";
 import {supabase} from "./supabase";
-import {Activity,Award,BadgeCheck,BookOpen,Brain,Check,ChevronRight,Cigarette,Clock3,Film,Headphones,Heart,Megaphone,MoonStar,Plus,Podcast,Search,Settings2,ShieldCheck,Smartphone,Sparkles,Trophy,Users,Video,ArrowUpRight} from "lucide-react";
+import {Activity,Award,BadgeCheck,BookOpen,Brain,Check,ChevronRight,Cigarette,Clock3,Film,Headphones,Heart,Megaphone,MoonStar,Plus,Podcast,Search,Settings2,ShieldCheck,Smartphone,Sparkles,Trophy,Users,Video,ArrowUpRight,WandSparkles} from "lucide-react";
 type Props={page:string;userId:string;role:string;displayName:string;onToast:(s:string)=>void;onNavigate:(page:string)=>void};
 type Content={id:string;title:string;summary:string|null;content_type:string;language:string;source_notes:string|null;body:any;created_at:string};
 const mediaKinds=[{id:"short",label:"Shorts",icon:Film},{id:"video",label:"Long videos",icon:Video},{id:"podcast",label:"Podcasts",icon:Podcast},{id:"lesson",label:"Lessons",icon:BookOpen},{id:"quiz",label:"Quizzes",icon:Brain}];
