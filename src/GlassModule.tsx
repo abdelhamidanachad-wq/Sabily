@@ -4,7 +4,7 @@ import {
   Check, ChevronRight, CircleHelp, Clock3, Coins, Flame, Heart, HeartHandshake,
   Lightbulb, LockKeyhole, MessageCircle, MoonStar, Play, RotateCcw, ShieldCheck,
   Sparkles, Target, TrendingUp, Volume2, Wallet, HandHeart, Award, Headphones,
-  Bookmark, Compass, Bell, CheckCircle2
+  Bookmark, Compass, Bell, CheckCircle2, Users
 } from "lucide-react";
 
 type ModuleProps = {
