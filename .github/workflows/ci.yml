@@ -1,9 +1,12 @@
 name: Sabily CI
 on:
   push:
-    branches: [main, "mvp/working-pwa"]
+    branches: [main]
   pull_request:
     branches: [main]
+concurrency:
+  group: sabily-ci-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   build:
     runs-on: ubuntu-latest
