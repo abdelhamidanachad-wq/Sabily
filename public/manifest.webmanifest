@@ -1,0 +1,10 @@
+{
+  "name": "Sabily — A better path, together",
+  "short_name": "Sabily",
+  "description": "Faith, learning, personal growth and community for good.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#081e19",
+  "theme_color": "#0b2d24",
+  "icons": [{"src":"/sabily-mark.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
