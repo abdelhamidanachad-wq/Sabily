@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { Activity, BookOpen, Bot, Camera, CreditCard, FileText, Flag, HandHeart, KeyRound, LayoutDashboard, Library, LogOut, MessageCircle, Palette, Settings, ShieldCheck, Users, Wallet } from "lucide-react";
 import { getSabilyRole, supabase, supabaseReady, type SabilyRole } from "./supabase";
 
@@ -20,7 +20,7 @@ function Login({ signedIn }: { signedIn: (id: string, email: string, role: Sabil
   const [busy,setBusy] = useState(false);
   const [error,setError] = useState("");
   const [signup,setSignup] = useState(false);
-  async function submit(e: React.FormEvent) {
+  async function submit(e: FormEvent) {
     e.preventDefault(); setError("");
     if (!supabase) { setError("Add the Supabase URL and publishable key to .env.local."); return; }
     setBusy(true);
