@@ -1,6 +1,6 @@
 # Sabily — Global Muslim Community MVP
 
-Sabily is a mobile-first, installable web app for faith, learning, community and service. This repository is the source of truth for the current MVP.
+Sabily is a mobile-first, installable web app for faith, learning, community and service. This repository is the source of truth for the current MVP. The active implementation branch is `mvp/working-pwa` while the draft pull request is validated.
 
 ## Current stack
 
