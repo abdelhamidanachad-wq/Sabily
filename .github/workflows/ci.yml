@@ -1,7 +1,7 @@
 name: Sabily CI
 on:
   push:
-    branches: [main]
+    branches: [main, "mvp/working-pwa"]
   pull_request:
     branches: [main]
 jobs:
