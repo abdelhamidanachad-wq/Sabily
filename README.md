@@ -52,22 +52,18 @@ Never commit `.env.local`, Supabase service-role/secret keys, AI provider keys, 
 
 ## Supabase backend
 
-The connected Sabily backend is the Supabase project `le-shift` (`xxsyidandcqxwsbuhskp`) in `eu-west-1`. It contains the original Sabily platform schema, plus the community MVP tables:
+The active MVP backend is the dedicated Supabase project `SABILY` (`vkjtievnxxiuoiptzxii`) in `eu-central-1`. The earlier `le-shift` project (`xxsyidandcqxwsbuhskp`) is a separate legacy workspace and is not the target for this app.
 
-- `sabily_communities`
-- `sabily_community_members`
-- `sabily_community_posts`
-- `sabily_community_comments`
+The reproducible MVP migration is `supabase/migrations/20261101014112_sabily_mvp_core_auth_communities.sql`. It creates:
+- `sabily_profiles` and server-managed `sabily_user_roles`
+- `sabily_communities`, `sabily_community_members`, `sabily_community_posts`, and `sabily_community_comments`
+- Row Level Security policies and the Auth signup trigger
 
-The new community migrations are recorded in `supabase/migrations/20261101012818_sabily_communities_mvp.sql` and `supabase/migrations/20261101012829_sabily_community_policy_and_profile_fields.sql`. These match migrations already applied to the connected backend.
+New signups receive the `member` role. The exact owner email `abdel@sabily.io` receives `super_admin` at signup; roles cannot be edited from the browser. Do not assign roles from user-editable Auth metadata.
 
-The earlier `202611010001_sabily_ecosystem_core.sql` file is only an audit marker for pre-existing remote schema, not a complete bootstrap migration. Do not provision a blank Supabase project using this repository's migration folder alone. Export and review the full canonical schema and migration history before attempting a fresh-project restore.
+The earlier `202611010001_sabily_ecosystem_core.sql` file is a historical audit marker for the legacy project, not a bootstrap migration. Do not run it on a fresh project.
 
-Two JWT-protected Supabase Edge Functions are active:
-- `sabily-admin` — role assignment, moderation, settings and content workflow actions.
-- `sabily-ai` — AI draft generation with human review status.
-
-AI generation stays disabled until a provider secret is configured in Supabase Edge Function secrets (`AI_GATEWAY_API_KEY` or `OPENAI_API_KEY`). Never use a `VITE_` prefix for provider secrets.
+The new SABILY project currently has no Edge Functions deployed. The Admin AI studio therefore remains unavailable until the `sabily-ai` function is deployed and a provider secret is configured server-side (for example `AI_GATEWAY_API_KEY` or `OPENAI_API_KEY`). Never use a `VITE_` prefix for provider secrets.
 
 ## Vercel
 
