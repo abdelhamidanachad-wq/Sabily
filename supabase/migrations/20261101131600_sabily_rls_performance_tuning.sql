@@ -1,0 +1,32 @@
+-- Keep per-row auth checks cached by Postgres and index the new ecosystem foreign keys.
+drop policy if exists "Users read own worship logs" on public.sabily_worship_logs;
+create policy "Users read own worship logs" on public.sabily_worship_logs for select to authenticated using ((select auth.uid())=user_id);
+drop policy if exists "Users create own worship logs" on public.sabily_worship_logs;
+create policy "Users create own worship logs" on public.sabily_worship_logs for insert to authenticated with check ((select auth.uid())=user_id);
+drop policy if exists "Users delete own worship logs" on public.sabily_worship_logs;
+create policy "Users delete own worship logs" on public.sabily_worship_logs for delete to authenticated using ((select auth.uid())=user_id);
+drop policy if exists "Users read own tasbih sessions" on public.sabily_tasbih_sessions;
+create policy "Users read own tasbih sessions" on public.sabily_tasbih_sessions for select to authenticated using ((select auth.uid())=user_id);
+drop policy if exists "Users create own tasbih sessions" on public.sabily_tasbih_sessions;
+create policy "Users create own tasbih sessions" on public.sabily_tasbih_sessions for insert to authenticated with check ((select auth.uid())=user_id);
+drop policy if exists "Users manage own reminder preferences" on public.sabily_reminder_preferences;
+create policy "Users manage own reminder preferences" on public.sabily_reminder_preferences for all to authenticated using ((select auth.uid())=user_id) with check ((select auth.uid())=user_id);
+
+create index if not exists sabily_ad_placements_program_idx on public.sabily_ad_placements(program_id);
+create index if not exists sabily_app_settings_updated_by_idx on public.sabily_app_settings(updated_by);
+create index if not exists sabily_audit_log_actor_idx on public.sabily_audit_log(actor_id);
+create index if not exists sabily_communities_created_by_idx on public.sabily_communities(created_by);
+create index if not exists sabily_community_comments_author_idx on public.sabily_community_comments(author_id);
+create index if not exists sabily_community_posts_author_idx on public.sabily_community_posts(author_id);
+create index if not exists sabily_content_author_idx on public.sabily_content(author_id);
+create index if not exists sabily_content_interactions_content_idx on public.sabily_content_interactions(content_id);
+create index if not exists sabily_contributions_campaign_idx on public.sabily_contributions(campaign_id);
+create index if not exists sabily_contributions_user_idx on public.sabily_contributions(user_id);
+create index if not exists sabily_forum_comments_author_idx on public.sabily_forum_comments(author_id);
+create index if not exists sabily_forum_posts_author_idx on public.sabily_forum_posts(author_id);
+create index if not exists sabily_library_items_created_by_idx on public.sabily_library_items(created_by);
+create index if not exists sabily_media_assets_owner_idx on public.sabily_media_assets(owner_id);
+create index if not exists sabily_payment_records_plan_idx on public.sabily_payment_records(plan_id);
+create index if not exists sabily_reports_assigned_to_idx on public.sabily_reports(assigned_to);
+create index if not exists sabily_reports_reporter_idx on public.sabily_reports(reporter_id);
+create index if not exists sabily_user_roles_granted_by_idx on public.sabily_user_roles(granted_by);
