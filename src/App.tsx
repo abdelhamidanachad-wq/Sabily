@@ -3,7 +3,7 @@ import {
   Home, BookOpen, Clock3, Compass, Users, UserCircle2, LogOut, Plus,
   Send, MapPin, MoonStar, Sun, Globe2, Heart, MessageCircle, ShieldCheck,
   Search, ChevronLeft, ChevronRight, RefreshCw, X, Sparkles, Menu,
-  Activity, BookHeart, CalendarDays, Wallet, HandHeart, Target, Bell, GraduationCap, Brain, Film, ShieldAlert, Award, LayoutDashboard, Settings2
+  Activity, BookHeart, CalendarDays, Wallet, HandHeart, Target, Bell, GraduationCap, Brain, Film, ShieldAlert, Award, LayoutDashboard, Settings2, Cpu
 } from "lucide-react";
 import { supabase, supabaseReady, getSabilyRole, type SabilyRole } from "./supabase";
 import AdminWorkspace from "./AdminWorkspace";
@@ -34,6 +34,7 @@ const nav = [
   { id:"Tajweed", label:"Tajweed", icon:GraduationCap },
   { id:"Hadith", label:"Hadith Nawawi", icon:BookHeart },
   { id:"Tasbih", label:"Tasbih", icon:Activity },
+  { id:"Noor Compute", label:"Noor Compute", icon:Cpu },
   { id:"Communities", label:"Communities", icon:Users },
   { id:"AI Companion", label:"AI Companion", icon:Sparkles },
   { id:"Noor Wallet", label:"Noor rewards", icon:Wallet },
