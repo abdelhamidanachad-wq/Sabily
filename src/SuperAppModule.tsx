@@ -1,6 +1,7 @@
 import {useEffect,useState,type FormEvent} from "react";
 import {supabase} from "./supabase";
 import {AdSlot} from "./ExperienceLayer";
+import ShareStudio from "./ShareStudio";
 import {Activity,Award,BadgeCheck,BookOpen,Brain,Check,ChevronRight,Cigarette,Clock3,Film,Headphones,Heart,Megaphone,MoonStar,Bell,Plus,Podcast,Search,Settings2,ShieldCheck,Smartphone,Sparkles,Trophy,LockKeyhole,Users,Video,ArrowUpRight,WandSparkles} from "lucide-react";
 type Props={page:string;userId:string;role:string;displayName:string;onToast:(s:string)=>void;onNavigate:(page:string)=>void};
 type Content={id:string;title:string;summary:string|null;content_type:string;language:string;source_notes:string|null;body:any;created_at:string;media_url?:string|null;thumbnail_url?:string|null;duration_seconds?:number|null};
@@ -77,11 +78,12 @@ function MemberCard({userId,displayName}:{userId:string;displayName:string}){
 }
 export default function SuperAppModule({page,userId,role,displayName,onToast,onNavigate}:Props){
  if(page==="Content Centre")return <ContentCentre userId={userId} onToast={onToast}/>;
+ if(page==="Share Studio")return <ShareStudio/>;
  if(page==="Content Studio")return <ContentStudio userId={userId} onToast={onToast}/>;
  if(page==="Knowledge")return <Knowledge/>;
  if(page==="Quizzes")return <Quiz userId={userId} onToast={onToast}/>;
  if(page==="Digital Wellbeing")return <Detox userId={userId} onToast={onToast}/>;
  if(page==="Admin Studio")return <AdminStudio userId={userId} role={role} onToast={onToast}/>;
  if(page==="Members")return <div className="ecosystem-stack"><Header eyebrow="UMMAH · CONTRIBUTION & GROWTH" title="Your place in the community" body="Levels reflect helpful participation and learning milestones — never a measure of faith or piety."/><MemberCard userId={userId} displayName={displayName}/></div>;
- return <div className="ecosystem-stack"><Header eyebrow="SABILY MINI APPS" title="Your toolbox" body="Focused tools that help you practise, learn and contribute without endless feeds."/><div className="miniapp-grid">{[{name:"Content centre",icon:Film,desc:"Shorts, courses and podcasts",go:"Content Centre"},{name:"Islamic knowledge",icon:BookOpen,desc:"Hadith, Seerah, Fiqh",go:"Knowledge"},{name:"Quizzes & games",icon:Brain,desc:"Short learning challenges",go:"Quizzes"},{name:"Digital wellbeing",icon:Heart,desc:"Build healthier habits",go:"Digital Wellbeing"},{name:"Tasbih & adhkar",icon:MoonStar,desc:"Daily remembrance",go:"Tasbih"},{name:"Qur'an",icon:BookOpen,desc:"Read and reflect",go:"Quran"},{name:"Communities",icon:Users,desc:"Learn and contribute",go:"Communities"},{name:"Noor rewards",icon:Sparkles,desc:"Transparent points ledger",go:"Noor Wallet"}].map(m=><button className="miniapp-tile" key={m.name} onClick={()=>onNavigate(m.go)}><m.icon/><b>{m.name}</b><small>{m.desc}</small><ChevronRight size={15}/></button>)}</div></div>
+ return <div className="ecosystem-stack"><Header eyebrow="SABILY MINI APPS" title="Your toolbox" body="Focused tools that help you practise, learn and contribute without endless feeds."/><div className="miniapp-grid">{[{name:"Content centre",icon:Film,desc:"Shorts, courses and podcasts",go:"Content Centre"},{name:"Share cards",icon:Sparkles,desc:"Adhkar, ayat and Eid greetings",go:"Share Studio"},{name:"Islamic knowledge",icon:BookOpen,desc:"Hadith, Seerah, Fiqh",go:"Knowledge"},{name:"Quizzes & games",icon:Brain,desc:"Short learning challenges",go:"Quizzes"},{name:"Digital wellbeing",icon:Heart,desc:"Build healthier habits",go:"Digital Wellbeing"},{name:"Tasbih & adhkar",icon:MoonStar,desc:"Daily remembrance",go:"Tasbih"},{name:"Qur'an",icon:BookOpen,desc:"Read and reflect",go:"Quran"},{name:"Communities",icon:Users,desc:"Learn and contribute",go:"Communities"},{name:"Noor rewards",icon:Sparkles,desc:"Transparent points ledger",go:"Noor Wallet"}].map(m=><button className="miniapp-tile" key={m.name} onClick={()=>onNavigate(m.go)}><m.icon/><b>{m.name}</b><small>{m.desc}</small><ChevronRight size={15}/></button>)}</div></div>
 }
