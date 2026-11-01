@@ -53,6 +53,7 @@ Deno.serve(async(req:Request)=>{
       case "publish_content":{
         if(!["creator","admin","super_admin"].includes(role)) return new Response(JSON.stringify({error:"Creator permission required"}),{status:403,headers});
         if(!body.contentId||!["draft","review","published","archived"].includes(body.status??"")) return new Response(JSON.stringify({error:"contentId and valid status required"}),{status:400,headers});
+        if(["published","archived"].includes(body.status)&&!isAdmin) return new Response(JSON.stringify({error:"Admin approval required to publish or archive content"}),{status:403,headers});
         const {data,error}=await db.from("sabily_content").update({status:body.status,published_at:body.status==="published"?new Date().toISOString():null,updated_at:new Date().toISOString()}).eq("id",body.contentId).select("id,status").single();
         if(error) throw error; result=data; entityType="content"; entityId=body.contentId; break;
       }
