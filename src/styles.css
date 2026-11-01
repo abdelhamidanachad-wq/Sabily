@@ -371,3 +371,35 @@
 .sabily-ad-overlay>div{width:min(560px,100%);background:var(--panel,#14251f);border:1px solid var(--line,rgba(255,255,255,.14));border-radius:20px;padding:14px;box-shadow:0 24px 90px rgba(0,0,0,.5)}
 .sabily-ad-overlay .sabily-ad-slot{margin:0;min-height:150px}
 .sabily-ad-dismiss{margin:12px 0 0 auto;display:flex;align-items:center;gap:7px;padding:8px 12px;border:1px solid var(--line,rgba(255,255,255,.15));border-radius:10px;background:transparent;color:inherit;cursor:pointer}
+
+
+/* Share Studio */
+.share-studio-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.82fr);gap:18px;align-items:start}
+.share-kind-tabs{display:flex;gap:8px;flex-wrap:wrap}
+.share-kind-tabs button,.share-choices button{border:1px solid var(--line,#dce4df);background:var(--surface,#fff);color:inherit;border-radius:12px;padding:10px 14px;cursor:pointer}
+.share-kind-tabs button.active,.share-choices button.selected{border-color:#4c8c72;background:rgba(65,133,101,.1)}
+.share-choices{display:grid;gap:8px;margin:10px 0 18px}
+.share-choices button{text-align:left;display:grid;gap:5px}
+.share-choices small{opacity:.7;font-size:11px}
+.share-palettes{display:flex;gap:10px;margin:10px 0 18px}
+.share-palettes button{width:46px;height:46px;border:2px solid transparent;border-radius:50%;padding:5px;cursor:pointer}
+.share-palettes button.selected{border-color:var(--text,#243b32)}
+.share-palettes button span{display:block;width:13px;height:13px;border-radius:50%;margin:auto}
+.share-actions{display:flex;flex-wrap:wrap;gap:8px}
+.share-actions button{display:inline-flex;align-items:center;gap:7px}
+.share-preview-head{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:14px;font-size:12px}
+.share-preview-head>span{display:flex;align-items:center;gap:6px}
+.share-watermark-pill{color:#54806b}
+.share-art{position:relative;overflow:hidden;aspect-ratio:4/5;border-radius:16px;color:#fffaf0;padding:9% 7%;display:flex;flex-direction:column;align-items:center;text-align:center;justify-content:space-between;isolation:isolate}
+.share-art-ornament{position:absolute;z-index:-1;inset:9%;border:1px solid #e2c68c88;border-radius:48% 48% 12% 12%;box-shadow:0 0 0 16px #e2c68c12,0 0 0 32px #e2c68c0b}
+.share-art-brand{font-size:clamp(10px,1.3vw,15px);letter-spacing:.28em;color:#e8d5a8}
+.share-art h2{font-size:clamp(18px,2.2vw,28px);font-weight:600;margin:6% 0 0}
+.share-art-arabic{font-family:"Noto Naskh Arabic","Amiri",serif;font-size:clamp(24px,3vw,38px);line-height:1.9;margin:auto 0;max-width:100%}
+.share-art p{font-size:clamp(12px,1.45vw,17px);line-height:1.7;max-width:95%}
+.share-art small{font-size:clamp(9px,1vw,12px);color:#ead8b5}
+.share-art-watermark{border-top:1px solid #e8d5a877;padding-top:12px;width:100%;font-size:17px;font-weight:800;letter-spacing:.12em}
+.share-art-watermark span{display:block;font-size:8px;font-weight:400;letter-spacing:.18em;margin-top:5px}
+.share-hidden-canvas{position:absolute;left:-10000px;top:0;width:1px;height:1px}
+.share-status{font-size:12px;color:#39795b;margin-top:10px}
+@media(max-width:800px){.share-studio-grid{grid-template-columns:1fr}.share-preview{max-width:540px;margin:auto}.share-actions button{flex:1 1 42%}}
+
