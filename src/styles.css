@@ -366,3 +366,8 @@
 .media-art{position:relative;overflow:hidden}
 .media-art>*:not(img){position:relative;z-index:1}
 @media(max-width:700px){.notification-popover{position:fixed;right:10px;top:72px;width:calc(100vw - 20px)}.sabily-ad-slot{align-items:flex-start}.sabily-ad-slot img{width:76px;height:76px}.media-player-modal{padding:17px}.sabily-ad-slot>div:last-child{padding-right:0}}
+
+.sabily-ad-overlay{position:fixed;inset:0;z-index:1150;background:rgba(2,10,7,.76);backdrop-filter:blur(8px);display:grid;place-items:center;padding:18px}
+.sabily-ad-overlay>div{width:min(560px,100%);background:var(--panel,#14251f);border:1px solid var(--line,rgba(255,255,255,.14));border-radius:20px;padding:14px;box-shadow:0 24px 90px rgba(0,0,0,.5)}
+.sabily-ad-overlay .sabily-ad-slot{margin:0;min-height:150px}
+.sabily-ad-dismiss{margin:12px 0 0 auto;display:flex;align-items:center;gap:7px;padding:8px 12px;border:1px solid var(--line,rgba(255,255,255,.15));border-radius:10px;background:transparent;color:inherit;cursor:pointer}
