@@ -45,6 +45,7 @@ const nav = [
   { id:"Reminders", label:"Reminders", icon:Bell },
   { id:"Qibla", label:"Qibla", icon:Compass },
   { id:"Content Centre", label:"Content centre", icon:Film },
+  { id:"Share Studio", label:"Share cards", icon:Sparkles },
   { id:"Knowledge", label:"Islamic knowledge", icon:BookOpen },
   { id:"Quizzes", label:"Quizzes & games", icon:Brain },
   { id:"Digital Wellbeing", label:"Digital wellbeing", icon:Heart },
