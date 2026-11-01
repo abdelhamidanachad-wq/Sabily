@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "./supabase";
+import SuperAppModule from "./SuperAppModule";
 import {
   Activity, ArrowDownRight, ArrowUpRight, BookHeart, BookOpen, Brain, CalendarDays,
   Check, ChevronRight, CircleHelp, Clock3, Coins, Flame, Heart, HeartHandshake,
@@ -11,6 +12,7 @@ import {
 type ModuleProps = {
   page: string;
   userId: string;
+  role: string;
   displayName: string;
   city: string;
   prayerTimes: Record<string,string> | null;
@@ -96,7 +98,7 @@ function ReminderPreferences({userId,onToast}:{userId:string;onToast:(s:string)=
  const toggle=async(key:typeof items[number][0])=>{const next={...prefs,[key]:!prefs[key]};setPrefs(next);if(!supabase){onToast("Preference saved for this session only.");return;}const {error}=await supabase.from("sabily_reminder_preferences").upsert({user_id:userId,...next,timezone:Intl.DateTimeFormat().resolvedOptions().timeZone||"Africa/Casablanca",updated_at:new Date().toISOString()},{onConflict:"user_id"});onToast(error?"Could not save reminder preference: "+error.message:"Reminder preference saved. Delivery will activate when notifications are configured.");};
  return <div className="glass-page-stack"><SectionTitle eyebrow="GENTLE NUDGES" title="Reminders" description="Choose helpful reminders for prayer, adhkar, Jumu'ah and learning. Your choices are saved privately to your account."/><GlassCard className="reminder-card"><Bell size={25}/><h2>Your reminders, your choice.</h2><p>Choose which reminders you want. These preferences are stored securely; scheduled push delivery still needs notification infrastructure and permission.</p></GlassCard><GlassCard className="reminder-options">{items.map(([key,title,desc])=><label className="reminder-option" key={key}><span><b>{title}</b><small>{desc}</small></span><input type="checkbox" checked={prefs[key]} disabled={!loaded} onChange={()=>toggle(key)}/></label>)}</GlassCard><p className="glass-footnote">No notifications are sent until you explicitly enable browser/device permission and Sabily's delivery service is configured.</p></div>;
 }
-export default function GlassModule({page,userId,displayName,city,prayerTimes,prayerDate,onNavigate,onToast}:ModuleProps) {
+export default function GlassModule({page,userId,role,displayName,city,prayerTimes,prayerDate,onNavigate,onToast}:ModuleProps) {
  if(page==="Tasbih")return <Tasbih userId={userId} onToast={onToast}/>;
  if(page==="Hadith")return <HadithPage/>;
  if(page==="Tajweed")return <TajweedPage/>;
@@ -107,5 +109,5 @@ export default function GlassModule({page,userId,displayName,city,prayerTimes,pr
  if(page==="Worship")return <div className="glass-page-stack"><SectionTitle eyebrow="IBADAH & DAILY RHYTHM" title={"Your worship, "+displayName} description={"Prayer times for "+city+". Build a gentle rhythm of worship and remembrance."}/><PrayerTracker userId={userId} prayerTimes={prayerTimes} onToast={onToast}/><div className="glass-feature-grid compact"><button className="glass-feature-tile" onClick={()=>onNavigate("Tasbih")}><span className="glass-feature-icon"><Activity size={19}/></span><span className="glass-feature-copy"><b>Tasbih & adhkar</b><small>Remember Allah with presence</small></span><ChevronRight size={16}/></button><button className="glass-feature-tile" onClick={()=>onNavigate("Prayer")}><span className="glass-feature-icon"><Clock3 size={19}/></span><span className="glass-feature-copy"><b>Prayer schedule</b><small>{prayerDate||"Local prayer timings"}</small></span><ChevronRight size={16}/></button><button className="glass-feature-tile" onClick={()=>onNavigate("Calendar")}><span className="glass-feature-icon"><CalendarDays size={19}/></span><span className="glass-feature-copy"><b>Jumu'ah & Ramadan</b><small>Friday and seasonal worship</small></span><ChevronRight size={16}/></button></div></div>;
  if(page==="Calendar")return <div className="glass-page-stack"><SectionTitle eyebrow="HIJRI RHYTHM" title="Islamic calendar" description="Plan around Jumu'ah, Ramadan, Taraweeh and meaningful dates. Local moon-sighting announcements will be clearly attributed."/><GlassCard className="calendar-card"><MoonStar size={27}/><div><span className="eyebrow">HIJRI DATE</span><h2>{new Intl.DateTimeFormat("en-u-ca-islamic", {day:"numeric",month:"long",year:"numeric"}).format(new Date())}</h2><p>Calendar dates are indicative. Confirm Ramadan and Eid with your trusted local authority.</p></div></GlassCard><div className="glass-feature-grid compact">{[["Jumu'ah","Friday reminders and Sunnah checklist"],["Ramadan","Fasting, Taraweeh and nightly reflection"],["Taraweeh","Personal prayer notes and reading plan"]].map(([t,d])=><GlassCard className="calendar-topic" key={t}><CalendarDays size={18}/><b>{t}</b><small>{d}</small><span className="setup-label">Planning module</span></GlassCard>)}</div></div>;
  if(page==="Reminders")return <ReminderPreferences userId={userId} onToast={onToast}/>;
- return <div className="glass-page-stack"><SectionTitle eyebrow="SABILY · YOUR PATH" title="Your space" description="A connected home for worship, learning, community and giving."/><FeatureGrid onNavigate={onNavigate}/></div>;
+ return <SuperAppModule page={page} userId={userId} role={role} displayName={displayName} onToast={onToast} onNavigate={onNavigate}/>;
 }
