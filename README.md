@@ -12,7 +12,10 @@ Sabily is a mobile-first, installable web app for faith, learning, community and
 
 ## MVP features
 
+- Public feature landing page with separate sign-in and account-creation flows.
 - Email/password registration and sign-in through Supabase Auth.
+- Demo access button: attempts demo sign-in and creates the public demo member on first use (requires email confirmation if enabled in Supabase Auth).
+- First-time owner signup using the exact email `abdel@sabily.io` is assigned `super_admin` by the database signup trigger; the account must be created through the sign-up screen before first login.
 - User profile onboarding with display name, city, country and language.
 - Global prayer-time lookup through AlAdhan (MWL calculation method by default).
 - Qibla bearing calculated locally after the user grants geolocation permission.
