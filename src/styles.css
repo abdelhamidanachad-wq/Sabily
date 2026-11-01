@@ -328,3 +328,46 @@
 .compute-trust{margin-top:13px;line-height:1.5}
 .compute-save-state{display:block;margin-top:12px}
 @media(max-width:640px){.noor-compute-card{padding:17px}.compute-status{margin-left:0}.compute-controls{align-items:flex-start;flex-direction:column}}
+
+
+/* Experience layer: notification inbox, media player and disclosed ad inventory */
+.notification-centre{position:relative;display:flex;align-items:center}
+.notification-trigger{position:relative;border:1px solid var(--line,rgba(255,255,255,.12));background:transparent;color:inherit;border-radius:12px;padding:10px;display:grid;place-items:center;cursor:pointer}
+.notification-trigger i{position:absolute;right:-5px;top:-5px;min-width:17px;height:17px;border-radius:20px;background:#d9a441;color:#18211b;font-size:10px;font-style:normal;font-weight:800;display:grid;place-items:center}
+.notification-popover{position:absolute;right:0;top:calc(100% + 12px);width:min(390px,calc(100vw - 28px));max-height:min(78vh,650px);overflow:auto;z-index:1000;background:var(--panel,#14251f);border:1px solid var(--line,rgba(255,255,255,.12));border-radius:18px;box-shadow:0 24px 80px rgba(0,0,0,.35);padding:14px}
+.notification-popover>header,.notification-preferences>div{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.notification-popover header button,.notification-list article>button{background:transparent;color:inherit;border:0;cursor:pointer}
+.notification-popover header small,.notification-preferences small,.notification-list small{display:block;opacity:.65;font-size:11px;margin-top:3px}
+.notification-preferences{padding:13px 0;border-bottom:1px solid var(--line,rgba(255,255,255,.12));display:grid;gap:9px}
+.notification-preferences>label{display:flex;align-items:center;justify-content:space-between;font-size:13px}
+.notification-preferences>button{border:1px solid var(--line,rgba(255,255,255,.15));border-radius:9px;background:transparent;color:inherit;padding:7px 9px;font-size:11px}
+.notification-list article{padding:12px 2px;border-bottom:1px solid var(--line,rgba(255,255,255,.1));display:flex;gap:8px;align-items:flex-start}
+.notification-list article.read{opacity:.58}
+.notification-list article p{font-size:13px;line-height:1.45;margin:5px 0}
+.notification-list article a{font-size:12px;color:var(--accent,#a8d5b5);white-space:nowrap}
+.notification-empty{font-size:13px;opacity:.65;padding:18px 4px}
+.sabily-ad-slot{position:relative;border:1px solid rgba(180,190,170,.22);background:rgba(130,150,125,.07);border-radius:16px;padding:14px;margin:18px 0;display:flex;gap:14px;align-items:center;overflow:hidden}
+.sabily-ad-label{position:absolute;right:12px;top:9px;font-size:9px;letter-spacing:.12em;text-transform:uppercase;opacity:.58;display:flex;align-items:center;gap:4px}
+.sabily-ad-slot img{width:104px;height:82px;object-fit:cover;border-radius:10px}
+.sabily-ad-slot>div:last-child{padding-right:65px}
+.sabily-ad-slot p{font-size:13px;opacity:.75;margin:5px 0}
+.sabily-ad-slot a{font-size:12px;font-weight:700;display:inline-flex;align-items:center;gap:5px;text-decoration:none}
+.sabily-ad-banner{min-height:72px;margin:16px auto;max-width:1180px}
+.sabily-ad-interstitial,.sabily-ad-popup{padding:24px;min-height:180px}
+.media-player-backdrop{position:fixed;inset:0;z-index:1200;background:rgba(3,12,9,.78);backdrop-filter:blur(12px);display:grid;place-items:center;padding:18px}
+.media-player-modal{position:relative;width:min(820px,100%);max-height:90vh;overflow:auto;border:1px solid var(--line,rgba(255,255,255,.15));border-radius:22px;background:var(--panel,#14251f);padding:24px;box-shadow:0 30px 100px rgba(0,0,0,.5)}
+.media-player-modal video{width:100%;max-height:55vh;background:#050806;border-radius:14px;margin:12px 0}
+.media-player-modal audio{width:100%;margin:14px 0}
+.player-close{float:right;border:1px solid var(--line,rgba(255,255,255,.16));border-radius:10px;background:transparent;color:inherit;padding:8px 12px;cursor:pointer}
+.player-unavailable{border:1px dashed var(--line,rgba(255,255,255,.18));border-radius:14px;padding:32px;text-align:center;display:grid;justify-items:center;gap:8px;margin:16px 0}
+.player-unavailable p,.player-transcript{font-size:13px;line-height:1.65;opacity:.78}
+.player-transcript{white-space:pre-wrap;border-top:1px solid var(--line,rgba(255,255,255,.12));padding-top:16px;margin-top:16px}
+.media-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit;opacity:.72}
+.media-art{position:relative;overflow:hidden}
+.media-art>*:not(img){position:relative;z-index:1}
+@media(max-width:700px){.notification-popover{position:fixed;right:10px;top:72px;width:calc(100vw - 20px)}.sabily-ad-slot{align-items:flex-start}.sabily-ad-slot img{width:76px;height:76px}.media-player-modal{padding:17px}.sabily-ad-slot>div:last-child{padding-right:0}}
+
+.sabily-ad-overlay{position:fixed;inset:0;z-index:1150;background:rgba(2,10,7,.76);backdrop-filter:blur(8px);display:grid;place-items:center;padding:18px}
+.sabily-ad-overlay>div{width:min(560px,100%);background:var(--panel,#14251f);border:1px solid var(--line,rgba(255,255,255,.14));border-radius:20px;padding:14px;box-shadow:0 24px 90px rgba(0,0,0,.5)}
+.sabily-ad-overlay .sabily-ad-slot{margin:0;min-height:150px}
+.sabily-ad-dismiss{margin:12px 0 0 auto;display:flex;align-items:center;gap:7px;padding:8px 12px;border:1px solid var(--line,rgba(255,255,255,.15));border-radius:10px;background:transparent;color:inherit;cursor:pointer}

@@ -28,3 +28,19 @@ self.addEventListener("fetch", (event) => {
     })));
   }
 });
+self.addEventListener("push", (event) => {
+  let payload = { title: "Sabily", body: "You have a new update.", url: "/" };
+  try { payload = { ...payload, ...(event.data ? event.data.json() : {}) }; } catch {}
+  event.waitUntil(self.registration.showNotification(payload.title, {
+    body: payload.body, icon: "/sabily-mark.svg", badge: "/sabily-mark.svg",
+    tag: payload.tag || "sabily-update", data: { url: payload.url || "/" }
+  }));
+});
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  const target = event.notification.data?.url || "/";
+  event.waitUntil(clients.matchAll({ type: "window", includeUncontrolled: true }).then((windows) => {
+    for (const client of windows) { if ("focus" in client) { client.navigate(target); return client.focus(); } }
+    return clients.openWindow(target);
+  }));
+});
