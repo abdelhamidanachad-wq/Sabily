@@ -48,23 +48,74 @@ function qiblaFrom(lat:number, lon:number) {
   const y = Math.sin(delta), x = Math.cos(phi) * Math.tan(kaabaLat) - Math.sin(phi) * Math.cos(delta);
   return (Math.atan2(y,x) * 180 / Math.PI + 360) % 360;
 }
-function Login({ onSignedIn }: { onSignedIn:(id:string,email:string)=>void }) {
+function PublicLanding({ onSignIn, onSignUp, onDemo }: { onSignIn:()=>void; onSignUp:()=>void; onDemo:()=>void }) {
+  const features = [
+    { icon:BookOpen, title:"Qur’an & learning", body:"Read the Qur’an and build a steady habit of learning, reflection and discovery." },
+    { icon:Clock3, title:"Prayer & daily rhythm", body:"Keep prayer times and meaningful daily practices close at hand." },
+    { icon:Compass, title:"Qibla direction", body:"Find the direction of the Kaaba with your device location, only when you allow it." },
+    { icon:Users, title:"Communities", body:"Meet people around shared interests, exchange encouragement and learn together." },
+    { icon:Heart, title:"Good deeds & growth", body:"Make space for personal growth, service and small actions that matter." },
+    { icon:ShieldCheck, title:"A thoughtful space", body:"A calmer digital experience built around faith, care and responsible community." }
+  ];
+  return <div className="public-home">
+    <header className="public-nav"><Brand/><nav><a href="#features">Features</a><a href="#about">Our approach</a></nav><div className="public-nav-actions"><button className="public-text-btn" onClick={onSignIn}>Sign in</button><button className="primary-btn" onClick={onSignUp}>Create account <ChevronRight size={16}/></button></div></header>
+    <main>
+      <section className="public-hero">
+        <div className="public-hero-copy"><span className="eyebrow">ONE COMMUNITY. MANY PATHS TO GOOD.</span><h1>A better path,<br/><em>together.</em></h1><p>Faith, learning, personal growth and meaningful action — brought together in one welcoming space for Muslims everywhere.</p><div className="public-hero-actions"><button className="primary-btn" onClick={onSignUp}>Start your journey <ChevronRight size={17}/></button><button className="secondary-btn" onClick={onSignIn}>I already have an account</button></div><div className="public-verse">“And whoever does an atom's weight of good will see it.”<small>Qur'an 99:7 · Translation wording may vary</small></div></div>
+        <div className="public-hero-art"><div className="public-orbit orbit-one"></div><div className="public-orbit orbit-two"></div><div className="public-emblem"><div className="brand-mark">S</div><strong>sabily</strong><small>A BETTER PATH, TOGETHER</small></div><div className="floating-note note-top"><MoonStar size={17}/> Faith & reflection</div><div className="floating-note note-bottom"><Heart size={17}/> Good deeds, every day</div></div>
+      </section>
+      <section className="public-proof"><div><strong>One space</strong><span>for faith and everyday life</span></div><div><strong>Learn together</strong><span>at your own pace</span></div><div><strong>Grow with purpose</strong><span>one good step at a time</span></div></section>
+      <section className="public-features" id="features"><div className="public-section-head"><span className="eyebrow">WHAT YOU CAN DO</span><h2>Tools for a more intentional day.</h2><p>Start with the essentials and grow into a richer journey as Sabily evolves.</p></div><div className="public-feature-grid">{features.map(({icon:Icon,title,body})=><article className="public-feature-card" key={title}><div className="public-feature-icon"><Icon size={21}/></div><h3>{title}</h3><p>{body}</p></article>)}</div></section>
+      <section className="public-approach" id="about"><div><span className="eyebrow">OUR APPROACH</span><h2>Technology should support what matters.</h2></div><p>Sabily is designed to encourage learning, worship, connection and service — without turning your attention into a commodity. We aim for a calmer, more useful digital space, with care for sources, privacy and people.</p></section>
+      <section className="public-cta"><div><span className="eyebrow">YOUR NEXT GOOD STEP</span><h2>Begin your journey with Sabily.</h2><p>Create an account and make this space your own.</p></div><button className="primary-btn" onClick={onSignUp}>Create your free account <ChevronRight size={17}/></button></section>
+    </main>
+    <footer className="public-footer"><Brand/><span>Built with care. Shared for the sake of good.</span><button className="public-text-btn" onClick={onSignIn}>Sign in</button></footer>
+  </div>;
+}
+
+function Login({ initialSignup=false, onBack, onSignedIn }: { initialSignup?:boolean; onBack:()=>void; onSignedIn:(id:string,email:string)=>void }) {
   const [email,setEmail]=useState(""); const [password,setPassword]=useState("");
-  const [signup,setSignup]=useState(false); const [busy,setBusy]=useState(false); const [error,setError]=useState("");
+  const [signup,setSignup]=useState(initialSignup); const [busy,setBusy]=useState(false); const [error,setError]=useState("");
+  async function authenticate(nextEmail:string,nextPassword:string,createIfMissing=false) {
+    if (!supabase) throw new Error("Sabily is waiting for its Supabase connection. Please check the deployment configuration.");
+    let result=await supabase.auth.signInWithPassword({email:nextEmail,password:nextPassword});
+    if (result.error && createIfMissing && /invalid login credentials/i.test(result.error.message)) {
+      const created=await supabase.auth.signUp({email:nextEmail,password:nextPassword,options:{data:{full_name:"Sabily Demo"}}});
+      if (created.error) throw created.error;
+      if (created.data.user && created.data.session) return {user:created.data.user,session:created.data.session};
+      throw new Error("Demo account created. Confirm demo@sabily.io by email, then use Demo access again. If confirmation is enabled, configure Supabase email settings first.");
+    }
+    if (result.error) throw result.error;
+    if (!result.data.user || !result.data.session) throw new Error("Account created. Check your email to confirm your address, then sign in.");
+    return result.data;
+  }
   async function submit(e:FormEvent) {
     e.preventDefault(); setBusy(true); setError("");
-    if (!supabase) { setError("Sabily is waiting for its Supabase connection. Please check the deployment configuration."); setBusy(false); return; }
-    const result = signup
-      ? await supabase.auth.signUp({email,password,options:{data:{full_name:email.split("@")[0]}}})
-      : await supabase.auth.signInWithPassword({email,password});
-    if (result.error) setError(result.error.message);
-    else if (result.data.user && result.data.session) onSignedIn(result.data.user.id,result.data.user.email||email);
-    else setError("Account created. Check your email to confirm your address, then sign in.");
-    setBusy(false);
+    try {
+      if (!supabase) throw new Error("Sabily is waiting for its Supabase connection. Please check the deployment configuration.");
+      if (signup) {
+        const result=await supabase.auth.signUp({email,password,options:{data:{full_name:email.split("@")[0]}}});
+        if (result.error) throw result.error;
+        if (result.data.user && result.data.session) onSignedIn(result.data.user.id,result.data.user.email||email);
+        else setError("Account created. Check your email to confirm your address, then sign in. The admin account receives its role automatically when abdel@sabily.io signs up.");
+      } else {
+        const result=await authenticate(email,password);
+        onSignedIn(result.user.id,result.user.email||email);
+      }
+    } catch(err) { setError(err instanceof Error?err.message:"Sign-in failed. Please try again."); }
+    finally { setBusy(false); }
+  }
+  async function useDemo() {
+    setBusy(true);setError("");
+    try {
+      const result=await authenticate("demo@sabily.io","Demo1234",true);
+      onSignedIn(result.user.id,result.user.email||"demo@sabily.io");
+    } catch(err) { setError(err instanceof Error?err.message:"Demo sign-in failed."); }
+    finally { setBusy(false); }
   }
   return <div className="auth-page">
-    <div className="auth-visual"><Brand/><div className="auth-hero"><span className="eyebrow">ONE UMMAH · MANY PATHS TO GOOD</span><h1>A better path,<br/><em>together.</em></h1><p>Faith, learning, community and meaningful action — in one welcoming space for Muslims everywhere.</p><div className="auth-verse">“So whoever does an atom's weight of good will see it.”<small>Qur'an 99:7 · Translation wording may vary</small></div></div><small className="auth-foot">Built with care. Shared for the sake of good.</small></div>
-    <div className="auth-form-wrap"><form className="auth-card" onSubmit={submit}><span className="eyebrow">WELCOME TO SABILY</span><h2>{signup?"Create your account":"Your journey starts here"}</h2><p>{signup?"Join a global community built around faith, growth and service.":"Sign in to continue your journey."}</p><label>Email address</label><input type="email" required autoComplete="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@example.com"/><label>Password</label><input type="password" required minLength={6} autoComplete={signup?"new-password":"current-password"} value={password} onChange={e=>setPassword(e.target.value)} placeholder="At least 6 characters"/><button className="primary-btn full-btn" disabled={busy}>{busy?"Please wait…":signup?"Create free account":"Sign in"}</button>{error&&<div className="notice error">{error}</div>}<p className="auth-switch">{signup?"Already a member?":"New to Sabily?"} <button type="button" className="link-btn" onClick={()=>{setSignup(!signup);setError("");}}>{signup?"Sign in":"Create an account"}</button></p><div className="auth-trust"><ShieldCheck size={15}/> Your account and community activity are protected by Supabase authentication and database policies.</div></form></div>
+    <div className="auth-visual"><button className="auth-back" onClick={onBack}><ChevronLeft size={16}/> Back to Sabily</button><Brand/><div className="auth-hero"><span className="eyebrow">ONE COMMUNITY · MANY PATHS TO GOOD</span><h1>A better path,<br/><em>together.</em></h1><p>Faith, learning, community and meaningful action — in one welcoming space for Muslims everywhere.</p><div className="auth-verse">“So whoever does an atom's weight of good will see it.”<small>Qur'an 99:7 · Translation wording may vary</small></div></div><small className="auth-foot">Built with care. Shared for the sake of good.</small></div>
+    <div className="auth-form-wrap"><form className="auth-card" onSubmit={submit}><span className="eyebrow">WELCOME TO SABILY</span><h2>{signup?"Create your account":"Sign in to Sabily"}</h2><p>{signup?"Join a global community built around faith, growth and service.":"Continue your journey and help shape the community."}</p><label>Email address</label><input type="email" required autoComplete="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@example.com"/><label>Password</label><input type="password" required minLength={6} autoComplete={signup?"new-password":"current-password"} value={password} onChange={e=>setPassword(e.target.value)} placeholder="Your password"/><button className="primary-btn full-btn" disabled={busy}>{busy?"Please wait…":signup?"Create account":"Sign in"}</button>{error&&<div className="notice error">{error}</div>}{!signup&&<button type="button" className="demo-access-btn" onClick={useDemo} disabled={busy}>Try the demo account <ChevronRight size={15}/></button>}<p className="auth-switch">{signup?"Already a member?":"New to Sabily?"} <button type="button" className="link-btn" onClick={()=>{setSignup(!signup);setError("");}}>{signup?"Sign in":"Create an account"}</button></p><div className="auth-trust"><ShieldCheck size={15}/> Your account and community activity are protected by Supabase authentication and database policies.</div></form></div>
   </div>;
 }
 
@@ -72,6 +123,7 @@ export default function App() {
   const [user,setUser]=useState<{id:string;email:string;role:SabilyRole}|null>(null);
   const [profile,setProfile]=useState<Profile|null>(null);
   const [page,setPage]=useState("Home");
+  const [publicScreen,setPublicScreen]=useState<"landing"|"signin"|"signup">("landing");
   const [loading,setLoading]=useState(true);
   const [busy,setBusy]=useState(false);
   const [toast,setToast]=useState("");
@@ -247,7 +299,9 @@ export default function App() {
   const direction=profile?.locale==="ar"?"rtl":"ltr";
 
   if(loading)return <div className="loading-screen"><div className="brand-mark">S</div><span>Preparing your Sabily space…</span></div>;
-  if(!user)return <Login onSignedIn={(id,email)=>{setLoading(true);hydrate(id,email);}}/>;
+  if(!user) return publicScreen==="landing"
+    ? <PublicLanding onSignIn={()=>setPublicScreen("signin")} onSignUp={()=>setPublicScreen("signup")} onDemo={()=>setPublicScreen("signin")}/>
+    : <Login initialSignup={publicScreen==="signup"} onBack={()=>setPublicScreen("landing")} onSignedIn={(id,email)=>{setLoading(true);hydrate(id,email);}}/>;
   if(!profile)return <div className="loading-screen"><div className="brand-mark">S</div><span>Setting up your profile…</span></div>;
   if(!profile.onboarding_complete)return <div className="onboarding-screen"><form className="onboarding-card" onSubmit={saveProfile}><Brand/><span className="eyebrow">LET'S MAKE THIS YOUR SPACE</span><h1>Welcome to Sabily.</h1><p>Set your location and language so prayer times, community discovery and the app experience can be relevant to you.</p><label>Display name</label><input required value={profileName} onChange={e=>setProfileName(e.target.value)} placeholder="How should we call you?"/><label>City</label><input required value={profileCity} onChange={e=>setProfileCity(e.target.value)} placeholder="Casablanca"/><label>Country</label><select value={profileCountry} onChange={e=>setProfileCountry(e.target.value)}>{countryOptions.map(([code,name])=><option value={code} key={code}>{name}</option>)}</select><label>App language</label><select value={profileLocale} onChange={e=>setProfileLocale(e.target.value)}><option value="en">English</option><option value="ar">العربية</option><option value="fr">Français</option></select><button className="primary-btn full-btn" disabled={busy}>{busy?"Saving…":"Continue to Sabily"}</button></form></div>;
   if(page==="Admin"&&isAdmin)return <div className="admin-return"><button className="back-app-btn" onClick={()=>setPage("Home")}><ChevronLeft size={16}/> Back to Sabily</button><AdminWorkspace/></div>;
