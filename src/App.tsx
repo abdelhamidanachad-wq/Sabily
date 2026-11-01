@@ -42,7 +42,16 @@ const nav = [
   { id:"Calendar", label:"Islamic calendar", icon:CalendarDays },
   { id:"Reminders", label:"Reminders", icon:Bell },
   { id:"Qibla", label:"Qibla", icon:Compass },
-  { id:"Content Centre", label:"Content centre", icon:Film },\n  { id:"Knowledge", label:"Islamic knowledge", icon:BookOpen },\n  { id:"Quizzes", label:"Quizzes & games", icon:Brain },\n  { id:"Digital Wellbeing", label:"Digital wellbeing", icon:Heart },\n  { id:"Members", label:"Member levels", icon:Award },\n  { id:"Mini Apps", label:"Mini apps", icon:LayoutDashboard },\n  { id:"Moderation", label:"Moderation", icon:ShieldAlert },\n  { id:"Content Studio", label:"AI content studio", icon:Sparkles },\n  { id:"Admin Studio", label:"Admin studio", icon:Settings2 },\n  { id:"Profile", label:"Profile", icon:UserCircle2 }
+  { id:"Content Centre", label:"Content centre", icon:Film },
+  { id:"Knowledge", label:"Islamic knowledge", icon:BookOpen },
+  { id:"Quizzes", label:"Quizzes & games", icon:Brain },
+  { id:"Digital Wellbeing", label:"Digital wellbeing", icon:Heart },
+  { id:"Members", label:"Member levels", icon:Award },
+  { id:"Mini Apps", label:"Mini apps", icon:LayoutDashboard },
+  { id:"Moderation", label:"Moderation", icon:ShieldAlert },
+  { id:"Content Studio", label:"AI content studio", icon:Sparkles },
+  { id:"Admin Studio", label:"Admin studio", icon:Settings2 },
+  { id:"Profile", label:"Profile", icon:UserCircle2 }
 ];
 const mobileNav = [
   { id:"Home", label:"Home", icon:Home },
@@ -313,7 +322,10 @@ export default function App() {
 
   const todayHijri=useMemo(()=>hijriDate(),[]);
   const filteredCommunities=communities.filter(c=>(c.name+" "+c.description+" "+c.category).toLowerCase().includes(search.toLowerCase()));
-  const isAdmin=user?.role==="admin"||user?.role==="super_admin";\n  const isModerator=isAdmin||user?.role==="moderator";\n  const isCreator=isAdmin||user?.role==="creator";\n  const visibleNav=nav.filter(item=>(item.id!=="Admin Studio"||isAdmin)&&(item.id!=="Content Studio"||isCreator)&&(item.id!=="Moderation"||isModerator));
+  const isAdmin=user?.role==="admin"||user?.role==="super_admin";
+  const isModerator=isAdmin||user?.role==="moderator";
+  const isCreator=isAdmin||user?.role==="creator";
+  const visibleNav=nav.filter(item=>(item.id!=="Admin Studio"||isAdmin)&&(item.id!=="Content Studio"||isCreator)&&(item.id!=="Moderation"||isModerator));
   const direction=profile?.locale==="ar"?"rtl":"ltr";
 
   if(loading)return <div className="loading-screen"><div className="brand-mark">S</div><span>Preparing your Sabily space…</span></div>;
