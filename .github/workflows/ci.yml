@@ -1,9 +1,12 @@
 name: Sabily CI
 on:
   push:
-    branches: [main, "mvp/working-pwa"]
+    branches: [main]
   pull_request:
     branches: [main]
+concurrency:
+  group: sabily-ci-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -12,5 +15,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: npm install
+          cache: npm
+      - run: npm ci
       - run: npm run build
