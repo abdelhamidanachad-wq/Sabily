@@ -1,0 +1,10 @@
+-- Sabily ecosystem core migration
+-- Applied to Supabase project xxsyidandcqxwsbuhskp as migration:
+--   version: 20261101005101
+--   name: sabily_ecosystem_core
+--
+-- This repository snapshot was assembled after the remote migration was applied.
+-- The canonical DDL is currently recorded in the linked Supabase migration history.
+-- Do not run this marker file as SQL on a fresh project. Export the migration from
+-- Supabase CLI (supabase db pull) before using this repository as a reproducible
+-- database deployment source.
