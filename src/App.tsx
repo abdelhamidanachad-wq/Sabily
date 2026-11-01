@@ -48,7 +48,7 @@ function qiblaFrom(lat:number, lon:number) {
   const y = Math.sin(delta), x = Math.cos(phi) * Math.tan(kaabaLat) - Math.sin(phi) * Math.cos(delta);
   return (Math.atan2(y,x) * 180 / Math.PI + 360) % 360;
 }
-function PublicLanding({ onSignIn, onSignUp, onDemo }: { onSignIn:()=>void; onSignUp:()=>void; onDemo:()=>void }) {
+function PublicLanding({ onSignIn, onSignUp }: { onSignIn:()=>void; onSignUp:()=>void }) {
   const features = [
     { icon:BookOpen, title:"Qur’an & learning", body:"Read the Qur’an and build a steady habit of learning, reflection and discovery." },
     { icon:Clock3, title:"Prayer & daily rhythm", body:"Keep prayer times and meaningful daily practices close at hand." },
@@ -300,7 +300,7 @@ export default function App() {
 
   if(loading)return <div className="loading-screen"><div className="brand-mark">S</div><span>Preparing your Sabily space…</span></div>;
   if(!user) return publicScreen==="landing"
-    ? <PublicLanding onSignIn={()=>setPublicScreen("signin")} onSignUp={()=>setPublicScreen("signup")} onDemo={()=>setPublicScreen("signin")}/>
+    ? <PublicLanding onSignIn={()=>setPublicScreen("signin")} onSignUp={()=>setPublicScreen("signup")}/>
     : <Login initialSignup={publicScreen==="signup"} onBack={()=>setPublicScreen("landing")} onSignedIn={(id,email)=>{setLoading(true);hydrate(id,email);}}/>;
   if(!profile)return <div className="loading-screen"><div className="brand-mark">S</div><span>Setting up your profile…</span></div>;
   if(!profile.onboarding_complete)return <div className="onboarding-screen"><form className="onboarding-card" onSubmit={saveProfile}><Brand/><span className="eyebrow">LET'S MAKE THIS YOUR SPACE</span><h1>Welcome to Sabily.</h1><p>Set your location and language so prayer times, community discovery and the app experience can be relevant to you.</p><label>Display name</label><input required value={profileName} onChange={e=>setProfileName(e.target.value)} placeholder="How should we call you?"/><label>City</label><input required value={profileCity} onChange={e=>setProfileCity(e.target.value)} placeholder="Casablanca"/><label>Country</label><select value={profileCountry} onChange={e=>setProfileCountry(e.target.value)}>{countryOptions.map(([code,name])=><option value={code} key={code}>{name}</option>)}</select><label>App language</label><select value={profileLocale} onChange={e=>setProfileLocale(e.target.value)}><option value="en">English</option><option value="ar">العربية</option><option value="fr">Français</option></select><button className="primary-btn full-btn" disabled={busy}>{busy?"Saving…":"Continue to Sabily"}</button></form></div>;
