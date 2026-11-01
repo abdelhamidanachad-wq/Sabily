@@ -54,10 +54,10 @@ Never commit `.env.local`, Supabase service-role/secret keys, AI provider keys, 
 
 The active MVP backend is the dedicated Supabase project `SABILY` (`vkjtievnxxiuoiptzxii`) in `eu-central-1`. The earlier `le-shift` project (`xxsyidandcqxwsbuhskp`) is a separate legacy workspace and is not the target for this app.
 
-The reproducible MVP migration is `supabase/migrations/20261101014112_sabily_mvp_core_auth_communities.sql`. It creates:
-- `sabily_profiles` and server-managed `sabily_user_roles`
-- `sabily_communities`, `sabily_community_members`, `sabily_community_posts`, and `sabily_community_comments`
-- Row Level Security policies and the Auth signup trigger
+The reproducible MVP migrations are:
+- `20261101014112_sabily_mvp_core_auth_communities.sql` — profiles, server-managed roles, community tables, RLS policies and Auth signup trigger.
+- `20261101014223_sabily_mvp_policy_performance_tuning.sql` — consolidated membership insert policy and foreign-key indexes.
+- `20261101014314_sabily_ai_jobs_for_draft_generation.sql` — private-per-user AI draft job ledger.
 
 New signups receive the `member` role. The exact owner email `abdel@sabily.io` receives `super_admin` at signup; roles cannot be edited from the browser. Do not assign roles from user-editable Auth metadata.
 
