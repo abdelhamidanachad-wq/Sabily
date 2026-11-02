@@ -451,7 +451,7 @@ export default function App() {
   const moduleEnabled=(id:string)=>{const key=modulePageKeys[id];return !key||moduleSettings[key]?.enabled!==false;};
   const visibleNav=nav.filter(item=>moduleEnabled(item.id)&&(item.id!=="Admin Studio"||isAdmin)&&(item.id!=="Content Studio"||isCreator)&&(item.id!=="Moderation"||isModerator));
   const visibleNavGroups=navGroups.map(group=>({...group,items:group.ids.map(id=>visibleNav.find(item=>item.id===id)).filter(Boolean) as typeof nav})).filter(group=>group.items.length>0);
-  const direction=profile.locale==="ar"?"rtl":"ltr";
+  const direction=profile?.locale==="ar"?"rtl":"ltr";
   const savePreferences=async(nextTheme=theme,nextWidgets=homeWidgets)=>{if(!user)return;const payload={theme:nextTheme,homeWidgets:nextWidgets,goal:mainGoal,minutes:dailyMinutes};localStorage.setItem("sabily-ui-"+user.id,JSON.stringify(payload));if(supabase)await supabase.auth.updateUser({data:{sabily_preferences:payload,sabily_goal:mainGoal,sabily_daily_minutes:dailyMinutes}});};
   const toggleWidget=(id:string)=>{const next=homeWidgets.includes(id)?homeWidgets.filter(x=>x!==id):[...homeWidgets,id];setHomeWidgets(next);void savePreferences(theme,next);};
   const moveWidget=(id:string,delta:number)=>{const i=homeWidgets.indexOf(id),j=i+delta;if(i<0||j<0||j>=homeWidgets.length)return;const next=[...homeWidgets];[next[i],next[j]]=[next[j],next[i]];setHomeWidgets(next);void savePreferences(theme,next);};
