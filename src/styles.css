@@ -453,3 +453,21 @@
 .member-app[data-theme="sand"] :focus-visible{outline:3px solid #B88A3B;outline-offset:3px}
 .member-app[data-theme="sand"] button,.member-app[data-theme="sand"] a{min-height:40px}
 @media(prefers-reduced-motion:reduce){.member-app[data-theme="sand"] *, .member-app[data-theme="sand"] *::before,.member-app[data-theme="sand"] *::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+.member-app[data-theme="sand"] .azkar-progress-card,.member-app[data-theme="sand"] .azkar-counter,.member-app[data-theme="sand"] .azkar-list>button,.member-app[data-theme="sand"] .tasbih-main,.member-app[data-theme="sand"] .tasbih-side,.member-app[data-theme="sand"] .prayer-tracker-card{background:var(--surface);border-color:var(--line);color:var(--ink);box-shadow:0 8px 24px #173b290b}
+.member-app[data-theme="sand"] .azkar-progress-card h2,.member-app[data-theme="sand"] .azkar-counter h2,.member-app[data-theme="sand"] .tasbih-phrase{color:var(--ink)}
+.member-app[data-theme="sand"] .azkar-progress-card p,.member-app[data-theme="sand"] .azkar-meaning,.member-app[data-theme="sand"] .azkar-source,.member-app[data-theme="sand"] .azkar-counter-meta,.member-app[data-theme="sand"] .tasbih-side p{color:var(--muted)}
+.member-app[data-theme="sand"] .azkar-arabic,.member-app[data-theme="sand"] .tasbih-arabic{color:var(--forest)}
+.member-app[data-theme="sand"] .azkar-list>button.active{background:#E7EFE3;border-color:#A7BCA8;color:var(--forest)}
+.member-app[data-theme="sand"] .azkar-list-number{background:#E7EFE3;color:var(--forest)}
+.member-app[data-theme="sand"] .azkar-count-badge{border-color:var(--line);color:var(--forest)}
+.member-app[data-theme="sand"] .azkar-counter-ring{background:conic-gradient(var(--jade) var(--progress),#E3E8DF var(--progress))}
+.member-app[data-theme="sand"] .azkar-counter-ring>button{background:radial-gradient(circle,#fff,#F1F3ED 72%);border-color:#CBD5CB;color:var(--forest)}
+.member-app[data-theme="sand"] .quran-select{color:var(--muted)}
+.member-app[data-theme="sand"] .verse-row{background:#fff;border-color:var(--line)}
+.member-app[data-theme="sand"] .verse-number{background:#E7EFE3;color:var(--forest)}
+.member-app[data-theme="sand"] .verse-translation{color:#40564A}
+.member-app[data-theme="sand"] .home-next-prayer{background:#E7EFE3;border-color:#D7E2D2;color:var(--forest)}
+.member-app[data-theme="sand"] .next-prayer-card{background:linear-gradient(120deg,#174A3A,#2F7259);color:#fff}
+.member-app[data-theme="sand"] .next-prayer-card .eyebrow,.member-app[data-theme="sand"] .next-prayer-card h2,.member-app[data-theme="sand"] .next-prayer-card p{color:#fff}
+.member-app[data-theme="sand"] .compass-heading-value,.member-app[data-theme="sand"] .compass-status{color:var(--muted)}
+
