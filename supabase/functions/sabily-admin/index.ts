@@ -134,6 +134,73 @@ Deno.serve(async (req: Request) => {
         if (error) throw error;
         return response(200, { ok: true, result: data ?? [] });
       }
+      case "list_events": {
+        if (!isSuperAdmin) return response(403, { error: "Super-admin permission required" });
+        const { data, error } = await db.from("sabily_events")
+          .select("id,title,description,event_type,starts_at,ends_at,venue,city,stream_url,event_status,stream_status,created_at,updated_at")
+          .order("starts_at", { ascending: true }).limit(200);
+        if (error) throw error;
+        return response(200, { ok: true, result: data ?? [] });
+      }
+      case "save_event": {
+        if (!isSuperAdmin) return response(403, { error: "Super-admin permission required" });
+        const id = typeof body.id === "string" && body.id ? body.id : null;
+        const title = String(body.title ?? "").trim();
+        const description = String(body.description ?? "").trim();
+        const eventType = String(body.eventType ?? "");
+        const eventStatus = String(body.eventStatus ?? "draft");
+        const startsAt = String(body.startsAt ?? "");
+        const endsAt = body.endsAt ? String(body.endsAt) : null;
+        const streamUrl = body.streamUrl ? String(body.streamUrl).trim() : null;
+        if (title.length < 3 || title.length > 120 || description.length < 3 || description.length > 2000 || !["community", "learning", "service", "jummah", "taraweeh"].includes(eventType) || !["draft", "published", "cancelled"].includes(eventStatus) || !Number.isFinite(Date.parse(startsAt)) || (endsAt && !Number.isFinite(Date.parse(endsAt)))) {
+          return response(400, { error: "Provide a valid title, description, category, time and status." });
+        }
+        if (endsAt && Date.parse(endsAt) <= Date.parse(startsAt)) return response(400, { error: "The end time must be after the start time." });
+        if (streamUrl) {
+          try {
+            const stream = new URL(streamUrl);
+            const host = stream.hostname.toLowerCase().replace(/^www\./, "");
+            if (stream.protocol !== "https:" || !["youtube.com", "m.youtube.com", "youtu.be", "youtube-nocookie.com"].includes(host)) throw new Error("invalid host");
+          } catch { return response(400, { error: "Use a secure YouTube or YouTube Live URL." }); }
+        }
+        const values = {
+          title, description, event_type: eventType, starts_at: new Date(startsAt).toISOString(),
+          ends_at: endsAt ? new Date(endsAt).toISOString() : null,
+          venue: body.venue ? String(body.venue).trim().slice(0, 160) : null,
+          city: body.city ? String(body.city).trim().slice(0, 100) : null,
+          stream_url: streamUrl, event_status: eventStatus, updated_by: auth.user.id, updated_at: new Date().toISOString(),
+        };
+        const result = id
+          ? await db.from("sabily_events").update(values).eq("id", id).select("id").single()
+          : await db.from("sabily_events").insert({ ...values, created_by: auth.user.id }).select("id").single();
+        if (result.error) throw result.error;
+        await log(action, "event", result.data.id, { eventType, eventStatus });
+        return response(200, { ok: true, result: result.data });
+      }
+      case "set_event_status": {
+        if (!isSuperAdmin) return response(403, { error: "Super-admin permission required" });
+        const eventId = String(body.eventId ?? "");
+        const status = String(body.status ?? "");
+        if (!eventId || !["draft", "published", "cancelled"].includes(status)) return response(400, { error: "Event ID and valid status are required." });
+        const { data, error } = await db.from("sabily_events").update({ event_status: status, updated_by: auth.user.id, updated_at: new Date().toISOString() }).eq("id", eventId).select("id,event_status").single();
+        if (error) throw error;
+        await log(action, "event", eventId, { status });
+        return response(200, { ok: true, result: data });
+      }
+      case "set_event_stream_status": {
+        if (!isSuperAdmin) return response(403, { error: "Super-admin permission required" });
+        const eventId = String(body.eventId ?? "");
+        const status = String(body.status ?? "");
+        if (!eventId || !["scheduled", "live", "ended"].includes(status)) return response(400, { error: "Event ID and valid broadcast status are required." });
+        const { data: event, error: readError } = await db.from("sabily_events").select("id,event_type,event_status,stream_url").eq("id", eventId).maybeSingle();
+        if (readError) throw readError;
+        if (!event) return response(404, { error: "Event not found." });
+        if (status === "live" && (event.event_status !== "published" || !["jummah", "taraweeh"].includes(event.event_type) || !event.stream_url)) return response(400, { error: "Publish a Jumu'ah or Taraweeh event with a stream URL before marking it live." });
+        const { data, error } = await db.from("sabily_events").update({ stream_status: status, updated_by: auth.user.id, updated_at: new Date().toISOString() }).eq("id", eventId).select("id,stream_status").single();
+        if (error) throw error;
+        await log(action, "event", eventId, { streamStatus: status });
+        return response(200, { ok: true, result: data });
+      }
       case "update_module": {
         if (!isSuperAdmin) return response(403, { error: "Super-admin permission required" });
         const key = String(body.key ?? "");
