@@ -182,7 +182,7 @@ Deno.serve(async (req: Request) => {
         const eventId = String(body.eventId ?? "");
         const status = String(body.status ?? "");
         if (!eventId || !["draft", "published", "cancelled"].includes(status)) return response(400, { error: "Event ID and valid status are required." });
-        const { data, error } = await db.from("sabily_events").update({ event_status: status, updated_by: auth.user.id, updated_at: new Date().toISOString() }).eq("id", eventId).select("id,event_status").single();
+        const { data, error } = await db.from("sabily_events").update({ event_status: status, stream_status: status === "published" ? "scheduled" : "ended", updated_by: auth.user.id, updated_at: new Date().toISOString() }).eq("id", eventId).select("id,event_status,stream_status").single();
         if (error) throw error;
         await log(action, "event", eventId, { status });
         return response(200, { ok: true, result: data });

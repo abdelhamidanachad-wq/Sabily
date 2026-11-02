@@ -167,7 +167,7 @@ export default function AdminWorkspace() {
   }
   async function setEventStatus(event:any,status:"draft"|"published"|"cancelled") {
     setWorking(event.id);setMessage("");
-    try{await adminAction("set_event_status",{eventId:event.id,status});setEvents(old=>old.map(row=>row.id===event.id?{...row,event_status:status}:row));setMessage(`Event marked ${status}.`);}
+    try{await adminAction("set_event_status",{eventId:event.id,status});setEvents(old=>old.map(row=>row.id===event.id?{...row,event_status:status,stream_status:status==="published"?"scheduled":"ended"}:row));setMessage(`Event marked ${status}.`);}
     catch(error){setMessage(error instanceof Error?error.message:"Could not update event status.");}
     finally{setWorking("");}
   }
