@@ -176,3 +176,104 @@
 @media(max-width:700px){.home-layout{grid-template-columns:1fr;gap:18px}.home-layout>.welcome-banner,.home-layout>.home-widget:has(.prayer-card),.home-layout>.quick-grid,.home-layout>.home-toolkit,.home-layout>.events-preview,.home-layout>.good-card{grid-column:1}.quick-grid{padding-left:12px}.quick-grid button:before{left:-13px}.member-content{padding-top:20px}.member-topbar{height:70px;padding:0 14px}.topbar-right{gap:8px}.noor-mini-pill{font-size:0!important;min-width:39px;justify-content:center}.noor-mini-pill svg{width:18px;height:18px}.welcome-banner{min-height:300px;padding:25px 22px;border-radius:22px}.welcome-banner h1{font-size:43px}.banner-art{width:130px;height:160px;opacity:.48}.moon-orbit{width:105px;height:105px}.banner-art>span{font-size:12px}.prayer-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.qibla-panel{grid-template-columns:1fr;gap:10px;padding:21px!important}.compass-wrap{max-width:300px}.qibla-result{text-align:center}.quran-toolbar{top:70px}.noor-hero{grid-template-columns:1fr;min-height:0;padding:24px 21px}.noor-hero-copy>p{max-width:390px}.noor-orb-scene{position:absolute;right:-48px;bottom:-65px;width:210px;opacity:.45;pointer-events:none}.noor-preview-tag{margin-bottom:19px}.noor-hero h1{font-size:57px}.noor-value-banner{grid-template-columns:1fr;padding:19px}.noor-current-level{justify-self:start;border-left:0;border-top:1px solid rgba(202,226,188,.12);padding:12px 0 0}.noor-balance-note{line-height:1.55}.noor-level-track{gap:4px}.noor-level-marker{width:34px;height:34px}.noor-level-marker svg{width:15px}.noor-level-copy b{font-size:10px}.noor-level-copy small{font-size:7px}.noor-badge-shelf{grid-template-columns:repeat(4,minmax(62px,1fr));overflow:auto}.noor-section-head{align-items:flex-start}.noor-achievement-grid{grid-template-columns:1fr 1fr}.noor-review-panel{grid-template-columns:1fr;gap:12px}.noor-review-points{grid-template-columns:1fr}.ecosystem-header{padding-bottom:14px}}
 @media(max-width:430px){.welcome-banner{min-height:270px}.welcome-banner h1{font-size:37px}.banner-art{width:100px}.prayer-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.noor-hero h1{font-size:49px}.noor-hero-actions{gap:10px}.noor-hero-link{padding:7px 0}.noor-level-track{grid-template-columns:repeat(5,minmax(58px,1fr));overflow:auto;justify-content:start;padding-bottom:15px}.noor-level-copy b{font-size:9px}.noor-achievement-grid{grid-template-columns:1fr}.noor-activity-row{padding:10px 8px}.noor-tabs button{padding:0 11px;font-size:9px}.noor-demo-chip{font-size:7px}.noor-review-panel{padding:20px}}
 @media(prefers-reduced-motion:reduce){.noor-orbit,.noor-orb-core,.noor-orb-star,.noor-hero-ornament,.noor-review-icon,.noor-level-seal,.noor-activity-row>i,.compass-wrap:after{animation:none!important}.member-nav,.quick-grid button,.community-card,.miniapp-tile,.noor-achievement-card,.noor-badge{transition:none!important}}
+
+
+/* Sabily premium experience foundation — v1 (append-only rollout) */
+:root{
+  --sbl-forest-950:#0A211C;
+  --sbl-forest-900:#102F28;
+  --sbl-forest-800:#174438;
+  --sbl-jade-700:#2E6F5A;
+  --sbl-jade-100:#DCEBE2;
+  --sbl-paper:#F7F6F0;
+  --sbl-surface:#FFFFFF;
+  --sbl-ink:#182C26;
+  --sbl-muted:#718078;
+  --sbl-border:#E3E8E2;
+  --sbl-gold:#B99454;
+  --sbl-shadow-card:0 8px 28px rgba(16,47,40,.07);
+  --sbl-shadow-float:0 18px 54px rgba(16,47,40,.13);
+}
+.member-app{
+  --sabily-paper:var(--sbl-paper);
+  --sabily-surface:var(--sbl-surface);
+  --sabily-ink:var(--sbl-ink);
+  --sabily-muted:var(--sbl-muted);
+  --sabily-border:var(--sbl-border);
+}
+.member-app[data-theme="sand"]{
+  background:var(--sbl-paper);
+  color:var(--sbl-ink);
+  background-image:radial-gradient(ellipse at 90% 0%,rgba(185,148,84,.07),transparent 34%),linear-gradient(135deg,rgba(46,111,90,.035),transparent 55%);
+}
+.member-app[data-theme="sand"] .member-sidebar{
+  background:linear-gradient(180deg,#fff 0%,#F7F8F3 100%);
+  border-right:1px solid var(--sbl-border);
+  box-shadow:12px 0 42px rgba(16,47,40,.035);
+}
+.member-app[data-theme="sand"] .member-sidebar .brand-lockup strong{color:var(--sbl-forest-900)}
+.member-app[data-theme="sand"] .member-sidebar .brand-lockup small{color:var(--sbl-muted)}
+.member-app[data-theme="sand"] .global-pill{color:var(--sbl-jade-700);background:#EEF5EF;border-color:#DDE9DF}
+.member-app[data-theme="sand"] .member-nav{color:#65756D}
+.member-app[data-theme="sand"] .member-nav:hover{background:#F1F6F1;color:var(--sbl-forest-900)}
+.member-app[data-theme="sand"] .member-nav.active{background:#E5F0E7;color:#174E3D;border-color:#D5E5D8;box-shadow:inset 3px 0 var(--sbl-jade-700)}
+.member-app[data-theme="sand"] .member-topbar{
+  background:rgba(255,255,255,.88);
+  border-bottom:1px solid var(--sbl-border);
+  box-shadow:0 7px 30px rgba(16,47,40,.04);
+}
+.member-app[data-theme="sand"] .member-topbar h2{color:var(--sbl-forest-900)}
+.member-app[data-theme="sand"] .topbar-kicker{color:var(--sbl-jade-700)}
+.member-app[data-theme="sand"] .member-content{max-width:1440px;padding-top:clamp(24px,3vw,42px)}
+.member-app[data-theme="sand"] .welcome-banner{border-radius:26px;box-shadow:var(--sbl-shadow-float)}
+.member-app[data-theme="sand"] .prayer-card,
+.member-app[data-theme="sand"] .glass-card,
+.member-app[data-theme="sand"] .ecosystem-card,
+.member-app[data-theme="sand"] .community-card,
+.member-app[data-theme="sand"] .feed-post,
+.member-app[data-theme="sand"] .profile-form,
+.member-app[data-theme="sand"] .selected-community,
+.member-app[data-theme="sand"] .qibla-panel,
+.member-app[data-theme="sand"] .verses-panel,
+.member-app[data-theme="sand"] .azkar-panel,
+.member-app[data-theme="sand"] .personalize-panel{
+  border-color:var(--sbl-border)!important;
+  box-shadow:var(--sbl-shadow-card);
+}
+.member-app[data-theme="sand"] .mobile-nav{
+  background:rgba(255,255,255,.96);
+  border-top:1px solid var(--sbl-border);
+  box-shadow:0 -12px 35px rgba(16,47,40,.08);
+  padding:8px 5px calc(8px + env(safe-area-inset-bottom));
+}
+.member-app[data-theme="sand"] .mobile-nav button{color:#728078;font-size:10px;min-height:48px}
+.member-app[data-theme="sand"] .mobile-nav button.active{color:var(--sbl-jade-700)}
+.member-app[data-theme="sand"] :focus-visible{outline:3px solid #2E6F5A;outline-offset:3px}
+.member-app[dir="rtl"] .member-sidebar{border-right:0;border-left:1px solid var(--sbl-border)}
+.member-app[dir="rtl"] .member-nav.active{box-shadow:inset -3px 0 var(--sbl-jade-700)}
+.member-app[dir="rtl"] .member-nav:hover{transform:translateX(-2px)}
+.member-app[dir="rtl"] .auth-verse{border-left:0;border-right:2px solid #c8f169;padding:10px 18px 10px 0}
+.member-app[dir="rtl"] .page-intro:after,.member-app[dir="rtl"] .glass-section-title:after,.member-app[dir="rtl"] .ecosystem-header:after{right:auto;left:5%}
+.member-app button,.member-app a,.admin-shell button,.admin-shell a{touch-action:manipulation}
+.member-app :where(button,input,select,textarea){font-family:inherit}
+.member-app :where(input,textarea,select){min-height:44px}
+.member-app :where(button){min-height:40px}
+@media(min-width:901px){
+ .member-app .member-sidebar{width:252px;padding:27px 17px 18px}
+ .member-app .member-content{padding-left:clamp(28px,4vw,64px);padding-right:clamp(28px,4vw,64px)}
+ .member-app .member-nav{font-size:12px;padding:11px 12px;border-radius:11px}
+}
+@media(max-width:900px){
+ .member-app .mobile-nav{grid-template-columns:repeat(5,minmax(0,1fr))}
+ .member-app .mobile-nav button{gap:4px}
+}
+@media(max-width:520px){
+ .member-app .member-content{padding-bottom:calc(104px + env(safe-area-inset-bottom))}
+ .member-app .member-topbar{padding-inline:14px}
+ .member-app .member-topbar h2{font-size:16px}
+ .member-app .topbar-right{gap:7px}
+ .member-app .noor-mini-pill{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+ .member-app *, .member-app *::before,.member-app *::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
