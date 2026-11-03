@@ -59,7 +59,8 @@ export default function PrayerExperience({userId,city,prayerTimes,onToast}:Props
     if(result!=="granted"){onToast("Allow notifications in your browser settings to receive prayer alerts.");return;}
     try{
       const registration=await navigator.serviceWorker.ready;
-      const vapid=import.meta.env.VITE_VAPID_PUBLIC_KEY as string|undefined;
+      let vapid:string|undefined;
+      if(supabase){const {data:config}=await supabase.functions.invoke("sabily-provider-config",{body:{action:"public_config"}});vapid=config?.vapidPublicKey||undefined;}
       if(vapid&&supabase){
         let subscription=await registration.pushManager.getSubscription();
         if(!subscription){

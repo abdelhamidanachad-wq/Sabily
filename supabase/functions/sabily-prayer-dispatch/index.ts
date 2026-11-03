@@ -13,9 +13,12 @@ Deno.serve(async(req:Request)=>{
  const {data:secret}=await db.rpc("sabily_get_prayer_cron_secret");
  const supplied=req.headers.get("x-sabily-cron-secret")||"";
  if(!secret||!supplied||supplied!==secret)return out(401,{error:"Invalid scheduler authorization"});
- const publicKey=Deno.env.get("VAPID_PUBLIC_KEY"),privateKey=Deno.env.get("VAPID_PRIVATE_KEY"),subject=Deno.env.get("VAPID_SUBJECT")||"mailto:hello@sabily.io";
- if(!publicKey||!privateKey)return out(503,{error:"Configure VAPID_PUBLIC_KEY and VAPID_PRIVATE_KEY Edge Function secrets."});
- webpush.setVapidDetails(subject,publicKey,privateKey);
+ const [{data:publicKey},{data:privateKey}]=await Promise.all([
+  db.rpc("sabily_get_vapid_public_key"),db.rpc("sabily_get_vapid_private_key")
+ ]);
+ const subject=Deno.env.get("VAPID_SUBJECT")||"mailto:hello@sabily.io";
+ if(!publicKey||!privateKey)return out(503,{error:"VAPID key pair is not configured in Supabase Vault."});
+ webpush.setVapidDetails(subject,String(publicKey),String(privateKey));
  const now=new Date().toISOString();
  const {data:due,error}=await db.from("sabily_prayer_schedule").select("id,user_id,prayer_name,scheduled_at,timezone").is("delivered_at",null).lte("scheduled_at",now).order("scheduled_at").limit(250);
  if(error)return out(500,{error:"Could not load due prayer reminders"});

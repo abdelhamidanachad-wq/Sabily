@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { supabase } from "./supabase";
 import SuperAppModule from "./SuperAppModule";
 import NoorCompute from "./NoorCompute";
@@ -86,9 +86,23 @@ function TajweedPage() {
  const lessons=[["Makharij al-Huruf","Articulation points of Arabic letters","Letter"],["Sifat al-Huruf","Characteristics and qualities of letters","Sound"],["Ahkam an-Noon","Rules of Noon Sakinah and Tanween","Rule"],["Al-Madd","The rules of elongation","Timing"],["Al-Ghunnah","Nasalisation and its application","Sound"],["Waqf & Ibtida","Stopping and starting correctly","Practice"]];
  return <div className="glass-page-stack"><SectionTitle eyebrow="QUR'AN RECITATION" title="Tajweed centre" description="Build confidence step by step, from articulation points to applied recitation. Learn with qualified teachers and verified examples."/><GlassCard className="tajweed-hero"><div><span className="eyebrow">YOUR RECITATION JOURNEY</span><h2>Beautify your recitation<br/><em>with knowledge.</em></h2><p>Structured lessons, listening practice and a place to track what you have learned.</p><div className="setup-label"><Headphones size={14}/> Audio lessons and live coach are planned next</div></div><div className="tajweed-glow"><Volume2 size={42}/><span>تَجْوِيد</span></div></GlassCard><div className="tajweed-grid">{lessons.map(([title,desc,tag],i)=><GlassCard className="tajweed-lesson" key={title}><span className="lesson-index">{String(i+1).padStart(2,"0")}</span><div><span className="eyebrow">{tag}</span><h3>{title}</h3><p>{desc}</p></div><span className="lesson-status">Coming soon</span></GlassCard>)}</div></div>;
 }
-function AIPage({onToast}:{onToast:(s:string)=>void}) {
+type AIChatMessage={role:"assistant"|"user";content:string};
+function AIPage({userId,onToast}:{userId:string;onToast:(s:string)=>void}) {
  const [prompt,setPrompt]=useState("");
- return <div className="glass-page-stack"><SectionTitle eyebrow="SABILY INTELLIGENCE" title="Your learning companion" description="A thoughtful assistant for study plans, Qur'an learning and everyday questions — with clear source references and limits."/><GlassCard className="ai-companion-card"><div className="ai-orb"><Sparkles size={28}/></div><span className="eyebrow">SABILY AI</span><h2>Assalamu alaykum. What would you like to learn today?</h2><p>Ask for explanations, study plans or help finding trusted sources. The assistant will distinguish sourced information from general guidance and won't issue authoritative fatwas.</p><div className="ai-suggestions">{["Build me a Qur'an study plan","Explain a Tajweed rule","Help me learn the Forty Hadith"].map(x=><button key={x} onClick={()=>setPrompt(x)}>{x}<ChevronRight size={14}/></button>)}</div><div className="ai-input-row"><input value={prompt} onChange={e=>setPrompt(e.target.value)} placeholder="Ask Sabily AI…"/><button onClick={()=>onToast("AI provider key is not configured yet. Add it in Supabase Edge Function secrets to activate the assistant.")}><Sparkles size={17}/></button></div><div className="setup-label"><LockKeyhole size={13}/> AI service awaits its secure provider key</div></GlassCard></div>;
+ const [provider,setProvider]=useState<"openai"|"gemini">("openai");
+ const [messages,setMessages]=useState<AIChatMessage[]>([{role:"assistant",content:"Assalamu alaykum. I can help you study, plan learning and explore Islamic topics. I will distinguish sourced information from general explanation and will not issue religious rulings."}]);
+ const [busy,setBusy]=useState(false);
+ const send=async(event:FormEvent)=>{
+  event.preventDefault();const question=prompt.trim();if(!question||busy)return;
+  if(!supabase){onToast("Sabily is not connected to its AI service.");return;}
+  const next=[...messages,{role:"user" as const,content:question}];setMessages(next);setPrompt("");setBusy(true);
+  const context=next.slice(-8).map(message=>(message.role==="user"?"Member: ":"Sabily: ")+message.content).join("\n\n");
+  const {data,error}=await supabase.functions.invoke("sabily-ai",{body:{prompt:context,jobType:"chat",provider,language:"en"}});
+  setBusy(false);
+  if(error||data?.error){setMessages(current=>[...current,{role:"assistant",content:error?.message||data?.error||"I could not complete that response. Please try again."}]);return;}
+  setMessages(current=>[...current,{role:"assistant",content:data.content||"I could not produce a response."}]);
+ };
+ return <div className="glass-page-stack"><SectionTitle eyebrow="SABILY INTELLIGENCE" title="Your learning companion" description="A thoughtful assistant for study plans, Qur'an learning and everyday questions — with clear source references and limits."/><GlassCard className="ai-companion-card ai-chat-shell"><div className="ai-orb"><Sparkles size={28}/></div><span className="eyebrow">SABILY AI · PRIVATE BETA</span><h2>Assalamu alaykum. What would you like to learn today?</h2><p>Ask for explanations, study plans or help finding trusted sources. Sabily AI is a learning aid, not a substitute for qualified scholars or authoritative fatwas.</p><div className="ai-provider-row"><label htmlFor="sabily-ai-provider">AI provider</label><select id="sabily-ai-provider" value={provider} onChange={e=>setProvider(e.target.value as "openai"|"gemini")}><option value="openai">ChatGPT · OpenAI</option><option value="gemini">Gemini</option></select><small>Uses your team's configured provider key. Member chat limit: 20 requests/day.</small></div><div className="ai-chat-messages" aria-live="polite">{messages.map((message,index)=><article key={index} className={"ai-chat-message "+message.role}><b>{message.role==="assistant"?"Sabily":"You"}</b><p>{message.content}</p></article>)}{busy&&<div className="ai-chat-loading">Sabily is thinking…</div>}</div><div className="ai-suggestions">{["Build me a Qur'an study plan","Explain a Tajweed rule","Help me learn the Forty Hadith"].map(x=><button key={x} onClick={()=>setPrompt(x)}>{x}<ChevronRight size={14}/></button>)}</div><form className="ai-input-row" onSubmit={send}><input aria-label="Ask Sabily AI" value={prompt} onChange={e=>setPrompt(e.target.value)} placeholder="Ask Sabily AI…"/><button type="submit" disabled={busy||!prompt.trim()} aria-label="Send message"><Sparkles size={17}/></button></form><div className="setup-label"><ShieldCheck size={13}/> Private beta · responses are rate-limited and stored under your account</div></GlassCard></div>;
 }
 function NoorPage({onNavigate,userId}:{onNavigate:(page:string)=>void;userId:string}) {
  const [tab,setTab]=useState<"overview"|"badges"|"activity"|"about">("overview");
@@ -149,7 +163,7 @@ export default function GlassModule({page,userId,role,displayName,city,prayerTim
  if(page==="Noor Compute")return <div className="glass-page-stack"><SectionTitle eyebrow="PUBLIC-BENEFIT COMPUTING" title="Sabily Noor Compute" description="Contribute spare device capacity to approved useful-compute projects. Worship is never measured, monetised or rewarded here."/><NoorCompute userId={userId} onToast={onToast}/></div>;
  if(page==="Hadith")return <HadithPage/>;
  if(page==="Tajweed")return <TajweedPage/>;
- if(page==="AI Companion")return <AIPage onToast={onToast}/>;
+ if(page==="AI Companion")return <AIPage userId={userId} onToast={onToast}/>;
  if(page==="Noor Wallet")return <NoorPage onNavigate={onNavigate} userId={userId}/>;
  if(page==="Sadaqa")return <SadaqaPage onToast={onToast}/>;
  if(page==="Growth")return <GrowthPage/>;
