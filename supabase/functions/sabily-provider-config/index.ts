@@ -25,11 +25,15 @@ Deno.serve(async (req: Request) => {
   const { data: role, error: roleError } = await db.from("sabily_user_roles")
     .select("role").eq("user_id", auth.user.id).maybeSingle();
   if (roleError) return reply(500, { error: "Could not verify role" });
-  if (role?.role !== "super_admin") return reply(403, { error: "Super-admin access required" });
-
   let body: { action?: string; provider?: string; apiKey?: string };
   try { body = await req.json(); } catch { return reply(400, { error: "Invalid JSON" }); }
   const action = body.action ?? "list";
+  if (action === "public_config") {
+    const { data: vapidPublicKey, error } = await db.rpc("sabily_get_vapid_public_key");
+    if (error) return reply(503, { error: "Push notification public key is not configured." });
+    return reply(200, { vapidPublicKey: vapidPublicKey ?? null });
+  }
+  if (role?.role !== "super_admin") return reply(403, { error: "Super-admin access required" });
   if (action === "list") {
     const { data, error } = await db.rpc("sabily_provider_secret_status");
     if (error) return reply(503, { error: "Supabase Vault is not available. Apply the private-beta migration and enable Vault." });
