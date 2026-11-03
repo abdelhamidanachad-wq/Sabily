@@ -41,7 +41,7 @@ Deno.serve(async (req: Request) => {
   let apiKey = Deno.env.get(provider === "openai" ? "OPENAI_API_KEY" : provider === "gemini" ? "GEMINI_API_KEY" : "AI_GATEWAY_API_KEY");
   if (!apiKey && provider !== "vercel_ai_gateway") {
     const { data: storedKey } = await admin.rpc("sabily_get_provider_secret", { p_name: `sabily_provider_${provider}` });
-    apiKey = storedKey ? String(storedKey) : null;
+    apiKey = storedKey ? String(storedKey) : undefined;
   }
 
   const { data: job, error: insertError } = await admin.from("sabily_ai_jobs").insert({

@@ -16,6 +16,7 @@ export default function PrayerExperience({userId,city,prayerTimes,onToast}:Props
   const [permission,setPermission] = useState(typeof Notification === "undefined" ? "unsupported" : Notification.permission);
   const [saving,setSaving] = useState(false);
   const [nextLabel,setNextLabel] = useState("");
+  const [scheduleTick,setScheduleTick] = useState(0);
   const audioRef = useRef<HTMLAudioElement|null>(null);
 
   useEffect(()=>{
@@ -95,9 +96,10 @@ export default function PrayerExperience({userId,city,prayerTimes,onToast}:Props
         await registration.showNotification(title,{body,icon:"/sabily-mark.svg",badge:"/sabily-mark.svg",tag:"sabily-prayer-"+next.name.toLowerCase(),data:{url:"/app/prayer"}});
       }catch{new Notification(title,{body,icon:"/sabily-mark.svg"});}
       if(settings.notification_mode==="adhan_foreground"&&(selectedVoice?.audio_url||settings.adhan_audio_url))await playAdhan();
+      setScheduleTick(value=>value+1);
     },Math.min(delay,2147483000));
     return ()=>window.clearTimeout(timer);
-  },[settings,permission,prayerTimes,city,selectedVoice]);
+  },[settings,permission,prayerTimes,city,selectedVoice,scheduleTick]);
 
   return <section className="prayer-experience">
     <div className="prayer-experience-head"><div className="prayer-experience-icon"><BellRing size={20}/></div><div><span className="eyebrow">YOUR DAILY PRAYER RHYTHM</span><h3>Adhan & prayer reminders</h3><p>Choose a recorded Adhan voice, set prayer alerts and test the sound on this device.</p></div><span className={settings.enabled&&permission==="granted"?"prayer-ready":"prayer-pending"}>{settings.enabled&&permission==="granted"?"Alerts enabled":"Setup needed"}</span></div>
