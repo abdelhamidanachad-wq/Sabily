@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { CheckCircle2, CircleAlert, Eye, EyeOff, KeyRound, LoaderCircle, PlugZap, Save, ShieldCheck, TestTube2 } from "lucide-react";
 import { supabase } from "./supabase";
 
