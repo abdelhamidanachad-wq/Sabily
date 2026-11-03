@@ -36,9 +36,13 @@ Deno.serve(async (req: Request) => {
   const prompt = (body.prompt ?? "").trim();
   if (prompt.length < 10 || prompt.length > 12000) return new Response(JSON.stringify({ error: "Prompt must be 10–12,000 characters" }), { status: 400, headers: cors });
 
-  const provider = body.provider === "openai" ? "openai" : "vercel_ai_gateway";
-  const model = (body.model ?? (provider === "openai" ? "gpt-4o-mini" : "openai/gpt-4o-mini")).trim();
-  const apiKey = Deno.env.get(provider === "openai" ? "OPENAI_API_KEY" : "AI_GATEWAY_API_KEY");
+  const provider = body.provider === "gemini" ? "gemini" : body.provider === "openai" ? "openai" : "vercel_ai_gateway";
+  const model = (body.model ?? (provider === "gemini" ? "gemini-2.5-flash" : provider === "openai" ? "gpt-4o-mini" : "openai/gpt-4o-mini")).trim();
+  let apiKey = Deno.env.get(provider === "openai" ? "OPENAI_API_KEY" : provider === "gemini" ? "GEMINI_API_KEY" : "AI_GATEWAY_API_KEY");
+  if (!apiKey && provider !== "vercel_ai_gateway") {
+    const { data: storedKey } = await admin.rpc("sabily_get_provider_secret", { p_name: `sabily_provider_${provider}` });
+    apiKey = storedKey ? String(storedKey) : undefined;
+  }
 
   const { data: job, error: insertError } = await admin.from("sabily_ai_jobs").insert({
     user_id: authData.user.id,
@@ -59,26 +63,27 @@ Deno.serve(async (req: Request) => {
 
   const endpoint = provider === "openai"
     ? "https://api.openai.com/v1/chat/completions"
-    : "https://ai-gateway.vercel.sh/v1/chat/completions";
+    : provider === "gemini"
+      ? `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`
+      : "https://ai-gateway.vercel.sh/v1/chat/completions";
   try {
+    const systemPrompt = "You are Sabily's careful educational writing assistant. Be respectful, distinguish established sources from interpretation, do not invent religious quotations or citations, and mark material needing scholarly review. Return useful draft content only; never claim that a draft is an authoritative religious ruling.";
+    const requestBody = provider === "gemini"
+      ? { systemInstruction: { parts: [{ text: systemPrompt }] }, contents: [{ role: "user", parts: [{ text: prompt }] }], generationConfig: { temperature: 0.5 } }
+      : { model, messages: [{ role: "system", content: systemPrompt }, { role: "user", content: prompt }], temperature: 0.5 };
     const upstream = await fetch(endpoint, {
       method: "POST",
-      headers: { "Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model,
-        messages: [
-          { role: "system", content: "You are Sabily's careful educational writing assistant. Be respectful, distinguish established sources from interpretation, do not invent religious quotations or citations, and mark material needing scholarly review. Return useful draft content only; never claim that a draft is an authoritative religious ruling." },
-          { role: "user", content: prompt }
-        ],
-        temperature: 0.5
-      })
+      headers: provider === "gemini" ? { "Content-Type": "application/json" } : { "Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json" },
+      body: JSON.stringify(requestBody)
     });
     const result = await upstream.json().catch(() => ({}));
     if (!upstream.ok) {
       await admin.from("sabily_ai_jobs").update({ status: "failed", output: { error: result?.error?.message ?? "Provider request failed" }, completed_at: new Date().toISOString() }).eq("id", job.id);
       return new Response(JSON.stringify({ error: result?.error?.message ?? "AI provider request failed", jobId: job.id }), { status: upstream.status === 429 ? 429 : 502, headers: cors });
     }
-    const text = result?.choices?.[0]?.message?.content ?? "";
+    const text = provider === "gemini"
+      ? (result?.candidates?.[0]?.content?.parts ?? []).map((part: { text?: string }) => part.text ?? "").join("\n")
+      : result?.choices?.[0]?.message?.content ?? "";
     await admin.from("sabily_ai_jobs").update({
       status: "review",
       moderation_status: "pending",
