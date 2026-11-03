@@ -374,3 +374,42 @@
  .quick-photo-content{left:11px;bottom:11px}
  .quick-photo-content b{font-size:14px}
 }
+
+
+/* Feature-level art direction */
+.prayer-intro:after,.qibla-intro:after,.quran-intro:after{
+  top:0;right:0;width:34%;height:100%;border-radius:0;
+  background-position:center;background-size:cover;
+  opacity:.78;mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.35) 24%,#000 100%);
+}
+.prayer-intro:after{background-image:linear-gradient(90deg,rgba(8,35,26,.1),rgba(8,35,26,.08)),url("https://images.unsplash.com/photo-1652435517154-68b3a750f1d0?auto=format&fit=crop&w=900&q=80")}
+.qibla-intro:after{background-image:linear-gradient(90deg,rgba(8,35,26,.1),rgba(8,35,26,.08)),url("https://images.unsplash.com/photo-1652435517154-68b3a750f1d0?auto=format&fit=crop&w=900&q=80");background-position:center 38%}
+.quran-intro:after{background-image:linear-gradient(90deg,rgba(8,35,26,.08),rgba(8,35,26,.05)),url("https://images.unsplash.com/photo-1649297711865-3d7c4de3610f?auto=format&fit=crop&w=900&q=80");background-position:center 58%}
+.prayer-intro,.qibla-intro,.quran-intro{min-height:190px;padding-right:clamp(180px,25vw,330px)}
+.tasbih-editorial-banner{position:relative;display:flex;align-items:flex-end;min-height:220px;overflow:hidden;border:1px solid rgba(222,199,143,.18);border-radius:22px;background:#0c3327;isolation:isolate}
+.tasbih-editorial-banner:after{content:"";position:absolute;inset:0;z-index:0;background:linear-gradient(90deg,rgba(7,34,25,.96) 0%,rgba(7,34,25,.83) 40%,rgba(7,34,25,.12) 100%),linear-gradient(0deg,rgba(7,34,25,.3),transparent 60%)}
+.tasbih-editorial-banner img{position:absolute;inset:0;z-index:-1;width:100%;height:100%;object-fit:cover;object-position:center 48%;filter:saturate(.76)}
+.tasbih-editorial-banner>div{position:relative;z-index:1;max-width:520px;padding:28px 32px}
+.tasbih-editorial-banner .eyebrow{color:#e2c47e}
+.tasbih-editorial-banner h1{margin:10px 0 8px;color:#f4f0e4;font:500 clamp(28px,3.3vw,42px)/1.08 Georgia,serif;letter-spacing:-.8px}
+.tasbih-editorial-banner p{margin:0;color:#c4d2c6;font-size:12px;line-height:1.7}
+.azkar-editorial-image{position:relative;height:150px;overflow:hidden;border-radius:18px;border:1px solid rgba(221,198,141,.18);background:#0c3025}
+.azkar-editorial-image:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(7,34,25,.12),rgba(7,34,25,.06) 42%,rgba(7,34,25,.54))}
+.azkar-editorial-image img{width:100%;height:100%;object-fit:cover;object-position:center 48%;filter:saturate(.78)}
+.azkar-editorial-image span{position:absolute;z-index:1;right:24px;bottom:18px;color:#f0d89b;font:24px Georgia,serif;text-shadow:0 2px 12px rgba(0,0,0,.5)}
+.miniapp-grid{gap:13px}
+.miniapp-tile{position:relative;min-height:150px;padding:18px!important;border:1px solid rgba(207,220,192,.13)!important;border-radius:17px!important;background:linear-gradient(150deg,rgba(20,65,48,.88),rgba(9,37,28,.94))!important;box-shadow:0 12px 28px rgba(0,0,0,.14)!important;text-align:left;transition:transform .22s,border-color .22s,background .22s}
+.miniapp-tile:hover{transform:translateY(-4px);border-color:rgba(222,194,127,.32)!important;background:linear-gradient(150deg,rgba(29,80,58,.94),rgba(10,42,31,.97))!important}
+.miniapp-tile>svg:first-child{width:36px;height:36px;padding:8px;margin-bottom:12px;border:1px solid rgba(221,192,121,.22);border-radius:12px;background:rgba(219,188,112,.12);color:#e2c47e}
+.miniapp-tile>b{font-family:Georgia,serif;font-size:15px;font-weight:600;color:#f0f2e9}
+.miniapp-tile>small{margin-top:5px;color:#aebfb1;font-size:10px;line-height:1.5}
+.miniapp-tile>svg:last-child{position:absolute;right:15px;bottom:17px;width:15px;height:15px;color:#cdb574}
+@media(max-width:720px){
+ .prayer-intro,.qibla-intro,.quran-intro{min-height:155px;padding-right:0}
+ .prayer-intro:after,.qibla-intro:after,.quran-intro:after{width:46%;opacity:.42;mask-image:linear-gradient(90deg,transparent,#000 100%)}
+ .tasbih-editorial-banner{min-height:190px;border-radius:18px}
+ .tasbih-editorial-banner>div{padding:22px}
+ .azkar-editorial-image{height:125px}
+ .azkar-editorial-image span{font-size:19px;right:15px;bottom:13px}
+ .miniapp-tile{min-height:132px;padding:14px!important}
+}
