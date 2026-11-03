@@ -47,3 +47,32 @@ create policy "Members manage own prayer settings" on public.sabily_prayer_setti
 for all to authenticated using ((select auth.uid()) = user_id)
 with check ((select auth.uid()) = user_id);
 grant select,insert,update,delete on public.sabily_prayer_settings to authenticated;
+
+-- Service-role-only wrappers keep Vault access out of the public PostgREST schema.
+create or replace function public.sabily_provider_secret_status()
+returns table(name text, updated_at timestamptz)
+language sql
+security definer
+set search_path = public, vault
+as $$
+  select s.name::text, s.updated_at
+  from vault.secrets s
+  where s.name ~ '^sabily_provider_(openai|gemini|elevenlabs|higgsfield|leonardo)$';
+$$;
+revoke all on function public.sabily_provider_secret_status() from public, anon, authenticated;
+grant execute on function public.sabily_provider_secret_status() to service_role;
+
+create or replace function public.sabily_get_provider_secret(p_name text)
+returns text
+language sql
+security definer
+set search_path = public, vault
+as $$
+  select d.decrypted_secret::text
+  from vault.decrypted_secrets d
+  where d.name = p_name
+    and p_name ~ '^sabily_provider_(openai|gemini|elevenlabs|higgsfield|leonardo)$'
+  limit 1;
+$$;
+revoke all on function public.sabily_get_provider_secret(text) from public, anon, authenticated;
+grant execute on function public.sabily_get_provider_secret(text) to service_role;

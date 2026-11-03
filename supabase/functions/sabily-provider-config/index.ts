@@ -31,8 +31,7 @@ Deno.serve(async (req: Request) => {
   try { body = await req.json(); } catch { return reply(400, { error: "Invalid JSON" }); }
   const action = body.action ?? "list";
   if (action === "list") {
-    const { data, error } = await db.schema("vault").from("secrets")
-      .select("name,updated_at").in("name", providers.map((p) => `sabily_provider_${p}`));
+    const { data, error } = await db.rpc("sabily_provider_secret_status");
     if (error) return reply(503, { error: "Supabase Vault is not available. Apply the private-beta migration and enable Vault." });
     const configured = new Set((data ?? []).map((row) => row.name));
     return reply(200, { providers: providers.map((provider) => ({
@@ -59,10 +58,9 @@ Deno.serve(async (req: Request) => {
   if (action === "test") {
     const provider = body.provider as Provider;
     if (!providers.includes(provider)) return reply(400, { error: "Unknown provider." });
-    const { data: secret, error } = await db.schema("vault").from("decrypted_secrets")
-      .select("decrypted_secret").eq("name", `sabily_provider_${provider}`).maybeSingle();
-    if (error || !secret?.decrypted_secret) return reply(404, { error: "Save this provider key first." });
-    const key = String(secret.decrypted_secret);
+    const { data: secret, error } = await db.rpc("sabily_get_provider_secret", { p_name: `sabily_provider_${provider}` });
+    if (error || !secret) return reply(404, { error: "Save this provider key first." });
+    const key = String(secret);
     try {
       let response: Response | null = null;
       if (provider === "openai") response = await fetch("https://api.openai.com/v1/models", { headers: { Authorization: `Bearer ${key}` } });
