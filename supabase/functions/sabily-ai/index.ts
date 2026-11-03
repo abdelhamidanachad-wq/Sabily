@@ -27,11 +27,19 @@ Deno.serve(async (req: Request) => {
   const { data: roleRow, error: roleError } = await admin
     .from("sabily_user_roles").select("role").eq("user_id", authData.user.id).maybeSingle();
   if (roleError) return new Response(JSON.stringify({ error: "Could not verify permissions" }), { status: 500, headers: cors });
-  const allowed = ["creator", "admin", "super_admin"];
-  if (!roleRow || !allowed.includes(roleRow.role)) return new Response(JSON.stringify({ error: "Creator or admin role required" }), { status: 403, headers: cors });
 
   let body: { prompt?: string; title?: string; model?: string; language?: string; jobType?: string; provider?: string };
   try { body = await req.json(); } catch { return new Response(JSON.stringify({ error: "Invalid JSON body" }), { status: 400, headers: cors }); }
+  const role = roleRow?.role ?? "member";
+  const requestedJobType = body.jobType ?? "article";
+  const elevatedRoles = ["creator", "admin", "super_admin"];
+  const memberChat = role === "member" && requestedJobType === "chat";
+  if (!elevatedRoles.includes(role) && !memberChat) return new Response(JSON.stringify({ error: "AI chat is available to members; content generation requires creator or admin access." }), { status: 403, headers: cors });
+  if (requestedJobType === "chat") {
+    const { data: allowedByQuota, error: quotaError } = await admin.rpc("sabily_consume_ai_quota", { p_user_id: authData.user.id, p_daily_limit: 20 });
+    if (quotaError) return new Response(JSON.stringify({ error: "AI usage limits are not configured. Apply the AI chat quota migration." }), { status: 503, headers: cors });
+    if (!allowedByQuota) return new Response(JSON.stringify({ error: "Daily AI chat limit reached. Please try again tomorrow." }), { status: 429, headers: cors });
+  }
 
   const prompt = (body.prompt ?? "").trim();
   if (prompt.length < 10 || prompt.length > 12000) return new Response(JSON.stringify({ error: "Prompt must be 10–12,000 characters" }), { status: 400, headers: cors });
