@@ -14,6 +14,7 @@ export default function PrayerExperience({userId,city,prayerTimes,onToast}:Props
   const [voices,setVoices] = useState<Voice[]>([]);
   const [loaded,setLoaded] = useState(false);
   const [permission,setPermission] = useState(typeof Notification === "undefined" ? "unsupported" : Notification.permission);
+  const [pushRegistered,setPushRegistered] = useState(false);
   const [saving,setSaving] = useState(false);
   const [nextLabel,setNextLabel] = useState("");
   const [scheduleTick,setScheduleTick] = useState(0);
@@ -30,6 +31,8 @@ export default function PrayerExperience({userId,city,prayerTimes,onToast}:Props
       if(!active)return;
       if(prefs.data)setSettings({...defaults,...prefs.data});
       if(library.data)setVoices(library.data as Voice[]);
+      const {data:pushRows}=await supabase.from("sabily_push_subscriptions").select("id").eq("user_id",userId).eq("enabled",true).limit(1);
+      if(active)setPushRegistered(Boolean(pushRows?.length));
       if(library.error)onToast("Adhan voice library is not ready yet. Apply the private-beta database migrations.");
       setLoaded(true);
     })();
@@ -56,7 +59,21 @@ export default function PrayerExperience({userId,city,prayerTimes,onToast}:Props
     if(result!=="granted"){onToast("Allow notifications in your browser settings to receive prayer alerts.");return;}
     try{
       const registration=await navigator.serviceWorker.ready;
-      await registration.showNotification("Sabily prayer alerts enabled",{body:"Prayer reminders are enabled on this device while Sabily's reminder service is active.",icon:"/sabily-mark.svg",tag:"sabily-prayer-enabled"});
+      const vapid=import.meta.env.VITE_VAPID_PUBLIC_KEY as string|undefined;
+      if(vapid&&supabase){
+        let subscription=await registration.pushManager.getSubscription();
+        if(!subscription){
+          const pad="=".repeat((4-vapid.length%4)%4);
+          const raw=atob((vapid+pad).replace(/-/g,"+").replace(/_/g,"/"));
+          const applicationServerKey=Uint8Array.from(raw,char=>char.charCodeAt(0));
+          subscription=await registration.pushManager.subscribe({userVisibleOnly:true,applicationServerKey});
+        }
+        const serialized=subscription.toJSON();
+        const {error}=await supabase.from("sabily_push_subscriptions").upsert({user_id:userId,endpoint:subscription.endpoint,p256dh:serialized.keys?.p256dh,auth_secret:serialized.keys?.auth,user_agent:navigator.userAgent,enabled:true,last_seen_at:new Date().toISOString()},{onConflict:"user_id,endpoint"});
+        if(error)throw error;
+        setPushRegistered(true);
+      }
+      await registration.showNotification("Sabily prayer alerts enabled",{body:vapid?"This device is subscribed to prayer push alerts.":"Foreground reminders are enabled. Background delivery still needs VAPID configuration.",icon:"/sabily-mark.svg",tag:"sabily-prayer-enabled"});
       update({enabled:true});
     }catch(error){onToast(error instanceof Error?error.message:"Could not enable browser notifications.");}
   };
@@ -70,8 +87,20 @@ export default function PrayerExperience({userId,city,prayerTimes,onToast}:Props
     try{await audioRef.current.play();}catch{onToast("Your browser blocked audio playback. Tap Preview Adhan again.");}
   };
 
+
   useEffect(()=>{
-    if(!settings.enabled||permission!=="granted"||!prayerTimes)return;
+    if(!settings.enabled||permission!=="granted"||!pushRegistered||!prayerTimes||!supabase)return;
+    const now=new Date();
+    const rows=prayers.filter(p=>settings[p.key as keyof Settings]===true).map(p=>{
+      const raw=prayerTimes[p.name];const match=String(raw||"").match(/(\d{1,2}):(\d{2})/);if(!match)return null;
+      const at=new Date(now);at.setHours(Number(match[1]),Number(match[2]),0,0);if(at<=now)at.setDate(at.getDate()+1);
+      return {user_id:userId,prayer_name:p.name,scheduled_at:at.toISOString(),timezone:settings.timezone||Intl.DateTimeFormat().resolvedOptions().timeZone||"UTC"};
+    }).filter(Boolean);
+    if(rows.length)void supabase.from("sabily_prayer_schedule").upsert(rows as any[],{onConflict:"user_id,prayer_name,scheduled_at",ignoreDuplicates:true});
+  },[settings,permission,pushRegistered,prayerTimes,userId]);
+
+  useEffect(()=>{
+    if(!settings.enabled||permission!=="granted"||pushRegistered||!prayerTimes)return;
     const now=new Date();
     const candidates=prayers.filter(p=>settings[p.key as keyof Settings]===true).map(p=>{
       const raw=prayerTimes[p.name];
