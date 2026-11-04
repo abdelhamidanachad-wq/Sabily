@@ -32,9 +32,9 @@ Deno.serve(async (req: Request) => {
   try { body = await req.json(); } catch { return new Response(JSON.stringify({ error: "Invalid JSON body" }), { status: 400, headers: cors }); }
   const role = roleRow?.role ?? "member";
   const requestedJobType = body.jobType ?? "article";
-  const elevatedRoles = ["creator", "admin", "super_admin"];
+  const elevatedRoles = ["admin", "super_admin"];
   const memberChat = role === "member" && requestedJobType === "chat";
-  if (!elevatedRoles.includes(role) && !memberChat) return new Response(JSON.stringify({ error: "AI chat is available to members; content generation requires creator or admin access." }), { status: 403, headers: cors });
+  if (!elevatedRoles.includes(role) && !memberChat) return new Response(JSON.stringify({ error: "AI chat is available to members; Sabily Content Studio generation is restricted to admins." }), { status: 403, headers: cors });
   if (requestedJobType === "chat") {
     const { data: allowedByQuota, error: quotaError } = await admin.rpc("sabily_consume_ai_quota", { p_user_id: authData.user.id, p_daily_limit: 20 });
     if (quotaError) return new Response(JSON.stringify({ error: "AI usage limits are not configured. Apply the AI chat quota migration." }), { status: 503, headers: cors });

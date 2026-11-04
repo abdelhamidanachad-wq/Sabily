@@ -484,3 +484,16 @@
 .member-app[data-theme="sand"] .next-prayer-card .eyebrow,.member-app[data-theme="sand"] .next-prayer-card h2,.member-app[data-theme="sand"] .next-prayer-card p{color:#fff}
 .member-app[data-theme="sand"] .compass-heading-value,.member-app[data-theme="sand"] .compass-status{color:var(--muted)}
 
+
+/* Admin shell: fixed navigation rail, independent scrolling workspace. */
+@media (min-width:761px){
+  .admin-workspace,.admin-app,.admin-shell{height:100dvh;min-height:100dvh;overflow:hidden}
+  .admin-sidebar,.admin-nav{position:fixed;inset:0 auto 0 0;height:100dvh;max-height:100dvh;overflow-y:auto;overscroll-behavior:contain}
+  .admin-main,.main-area{margin-left:276px;height:100dvh;max-height:100dvh;min-height:0;overflow-y:auto;overscroll-behavior:contain}
+}
+@media (max-width:760px){
+  .admin-main,.main-area{margin-left:0;width:100%;min-width:0}
+  .admin-sidebar,.admin-nav{position:static;max-height:none}
+}
+.main-area{min-width:0}
+.content-area{min-width:0}
