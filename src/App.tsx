@@ -6,6 +6,7 @@ import {
   Activity, BookHeart, CalendarDays, Wallet, HandHeart, Target, Bell, GraduationCap, Brain, Film, ShieldAlert, Award, LayoutDashboard, Settings2, Cpu, Ellipsis, Radio
 } from "lucide-react";
 import { supabase, supabaseReady, getSabilyRole, type SabilyRole } from "./supabase";
+import { getLocaleDirection, normalizeLocale } from "./localization";
 import AdminWorkspace from "./AdminWorkspace";
 import PrayerExperience from "./PrayerExperience";
 import GlassModule from "./GlassModule";
@@ -266,7 +267,7 @@ export default function App() {
     }
     setProfile(p);
     setProfileName(p.display_name||email.split("@")[0]); setProfileCity(p.city||"Casablanca");
-    setProfileCountry(p.country_code||"MA"); setProfileLocale("en"); setProfileBio(p.bio||"");
+    setProfileCountry(p.country_code||"MA"); setProfileLocale(normalizeLocale(p.locale||"en")); setProfileBio(p.bio||"");
     setSelectedInterests(Array.isArray(p.interests)?p.interests:[]);
     try { const {data:authData}=await supabase.auth.getUser(); const meta=authData.user?.user_metadata||{}; const saved=JSON.parse(localStorage.getItem("sabily-ui-"+id)||"{}"); const prefs=meta.sabily_preferences||{}; if(saved.theme||prefs.theme)setTheme(saved.theme||prefs.theme); if(Array.isArray(saved.homeWidgets)||Array.isArray(prefs.homeWidgets))setHomeWidgets(saved.homeWidgets||prefs.homeWidgets); if(saved.goal||meta.sabily_goal)setMainGoal(saved.goal||meta.sabily_goal); if(saved.minutes||meta.sabily_daily_minutes)setDailyMinutes(saved.minutes||String(meta.sabily_daily_minutes)); } catch {}
     setLoading(false);
@@ -457,7 +458,8 @@ export default function App() {
   const moduleEnabled=(id:string)=>{const key=modulePageKeys[id];return !key||moduleSettings[key]?.enabled!==false;};
   const visibleNav=nav.filter(item=>moduleEnabled(item.id)&&(item.id!=="Moderation"||isModerator));
   const visibleNavGroups=navGroups.map(group=>({...group,items:group.ids.map(id=>visibleNav.find(item=>item.id===id)).filter(Boolean) as typeof nav})).filter(group=>group.items.length>0);
-  const direction=profile?.locale==="ar"?"rtl":"ltr";
+  const direction=getLocaleDirection(profile?.locale);
+  useEffect(()=>{const root=document.documentElement;root.lang=normalizeLocale(profile?.locale||"en");root.dir=direction;},[profile?.locale,direction]);
   const savePreferences=async(nextTheme=theme,nextWidgets=homeWidgets)=>{if(!user)return;const payload={theme:nextTheme,homeWidgets:nextWidgets,goal:mainGoal,minutes:dailyMinutes};localStorage.setItem("sabily-ui-"+user.id,JSON.stringify(payload));if(supabase)await supabase.auth.updateUser({data:{sabily_preferences:payload,sabily_goal:mainGoal,sabily_daily_minutes:dailyMinutes}});};
   const toggleWidget=(id:string)=>{const next=homeWidgets.includes(id)?homeWidgets.filter(x=>x!==id):[...homeWidgets,id];setHomeWidgets(next);void savePreferences(theme,next);};
   const moveWidget=(id:string,delta:number)=>{const i=homeWidgets.indexOf(id),j=i+delta;if(i<0||j<0||j>=homeWidgets.length)return;const next=[...homeWidgets];[next[i],next[j]]=[next[j],next[i]];setHomeWidgets(next);void savePreferences(theme,next);};
