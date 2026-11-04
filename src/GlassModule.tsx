@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { supabase } from "./supabase";
 import SuperAppModule from "./SuperAppModule";
+import AdhkarExperience from "./AdhkarExperience";
 import NoorCompute from "./NoorCompute";
 import {
   Activity, ArrowDownRight, ArrowUpRight, BookHeart, BookOpen, Brain, CalendarDays,
@@ -159,7 +160,7 @@ function ReminderPreferences({userId,onToast}:{userId:string;onToast:(s:string)=
 }
 export default function GlassModule({page,userId,role,displayName,city,prayerTimes,prayerDate,onNavigate,onToast}:ModuleProps) {
  if(page==="Tasbih")return <Tasbih userId={userId} onToast={onToast}/>;
- if(page==="Azkar")return <AzkarPage userId={userId}/>;
+ if(page==="Azkar")return <AdhkarExperience userId={userId} onToast={onToast}/>;
  if(page==="Noor Compute")return <div className="glass-page-stack"><SectionTitle eyebrow="PUBLIC-BENEFIT COMPUTING" title="Sabily Noor Compute" description="Contribute spare device capacity to approved useful-compute projects. Worship is never measured, monetised or rewarded here."/><NoorCompute userId={userId} onToast={onToast}/></div>;
  if(page==="Hadith")return <HadithPage/>;
  if(page==="Tajweed")return <TajweedPage/>;
