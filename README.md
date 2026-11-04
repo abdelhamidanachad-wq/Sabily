@@ -1,3 +1,7 @@
+## Sabily V2 roadmap
+
+The approved V2 architecture, language scope, mobile strategy, Discover creator model, phased delivery and release gates are maintained in [`docs/SABILY_V2_MASTER_PLAN.md`](docs/SABILY_V2_MASTER_PLAN.md). This plan is additive: existing integrations and features remain in place while implementation proceeds through preview-tested pull requests.
+
 # Sabily — Global Muslim Community MVP
 
 Sabily is a mobile-first, installable web app for faith, learning, community and service. This repository is the source of truth for the current MVP. The active implementation branch is `mvp/working-pwa` while the draft pull request is validated.
