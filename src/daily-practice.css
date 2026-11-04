@@ -1,5 +1,5 @@
 /* Sabily daily-life redesign: fixed app shell, Islamic geometry and calm habit surfaces. */
-@media (min-width: 761px) {
+@media (min-width: 761px) {\n  .home-layout > .daily-practice { grid-column: 1 / -1; }\n  .member-sidebar nav { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: rgba(194,220,177,.22) transparent; }
   html, body, #root { min-height: 100%; }
   body { overflow: hidden; }
   .member-app {
