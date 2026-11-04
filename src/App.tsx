@@ -112,7 +112,7 @@ function PublicLanding({ onSignIn, onSignUp }: { onSignIn:()=>void; onSignUp:()=
     let active=true;
     Promise.all([
       supabase.from("sabily_communities").select("id,name,slug,description,category,country_code,created_by,created_at").eq("visibility","public").order("created_at",{ascending:false}).limit(8),
-      supabase.from("sabily_events").select("id,title,description,event_type,starts_at,venue,city,stream_status").eq("event_status","published").gte("starts_at",new Date().toISOString()).order("starts_at",{ascending:true}).limit(12)
+      supabase.from("sabily_events").select("id,title,description,event_type,starts_at,venue,city,stream_status").eq("event_status","published").gte("starts_at",new Date().toISOString()).order("starts_at",{ascending:true}).limit(100)
     ]).then(([communities,events])=>{
       if(!active)return;
       if(!communities.error)setPublicCommunities((communities.data||[]) as Community[]);
