@@ -21,7 +21,7 @@ export default function ProviderSettings() {
   const [error, setError] = useState("");
 
   const refresh = async () => {
-    if (!supabase) return;
+    if (!supabase) { setError("Supabase is not connected. Check the app deployment configuration."); return; }
     const { data, error: invokeError } = await supabase.functions.invoke("sabily-provider-config", { body: { action: "list" } });
     if (invokeError || data?.error) { setError(invokeError?.message || data?.error || "Could not load provider status."); return; }
     setStates(data.providers || []);
@@ -32,7 +32,8 @@ export default function ProviderSettings() {
     const apiKey = (values[provider] || "").trim();
     if (!apiKey) { setError("Enter the API key before saving."); return; }
     setBusy(provider); setError(""); setFeedback("");
-    const { data, error: invokeError } = await supabase!.functions.invoke("sabily-provider-config", { body: { action: "save", provider, apiKey } });
+    if (!supabase) { setBusy(""); setError("Supabase is not connected. Check the app deployment configuration."); return; }
+    const { data, error: invokeError } = await supabase.functions.invoke("sabily-provider-config", { body: { action: "save", provider, apiKey } });
     setBusy("");
     if (invokeError || data?.error) { setError(invokeError?.message || data?.error || "Credential could not be saved."); return; }
     setValues(current => ({ ...current, [provider]: "" }));
@@ -42,10 +43,11 @@ export default function ProviderSettings() {
 
   const test = async (provider: Provider) => {
     setBusy("test-" + provider); setError(""); setFeedback("");
-    const { data, error: invokeError } = await supabase!.functions.invoke("sabily-provider-config", { body: { action: "test", provider } });
+    if (!supabase) { setBusy(""); setError("Supabase is not connected. Check the app deployment configuration."); return; }
+    const { data, error: invokeError } = await supabase.functions.invoke("sabily-provider-config", { body: { action: "test", provider } });
     setBusy("");
-    if (invokeError || data?.error) { setError(invokeError?.message || data?.error || "Provider test failed."); return; }
-    setFeedback(data.message || "Provider test completed.");
+    if (invokeError || data?.error || data?.ok === false || data?.verified === false) { setError(invokeError?.message || data?.error || data?.message || "Provider connection could not be verified."); return; }
+    setFeedback(data.message || "Provider authentication verified.");
   };
 
   return <div className="provider-settings">
