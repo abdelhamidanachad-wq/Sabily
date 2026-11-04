@@ -2,6 +2,7 @@ import {useEffect,useState,type FormEvent} from "react";
 import {supabase} from "./supabase";
 import {AdSlot} from "./ExperienceLayer";
 import ShareStudio from "./ShareStudio";
+import ContentDiscovery from "./ContentDiscovery";
 import {Activity,Award,BadgeCheck,BookOpen,Brain,Check,ChevronRight,Cigarette,Clock3,Film,Headphones,Heart,Megaphone,MoonStar,Bell,Plus,Podcast,Search,Settings2,ShieldCheck,Smartphone,Sparkles,Trophy,LockKeyhole,Users,Video,ArrowUpRight,WandSparkles,RefreshCw,EyeOff,Flag} from "lucide-react";
 type Props={page:string;userId:string;role:string;displayName:string;onToast:(s:string)=>void;onNavigate:(page:string)=>void};
 type Content={id:string;title:string;summary:string|null;content_type:string;language:string;source_notes:string|null;body:any;created_at:string;media_url?:string|null;thumbnail_url?:string|null;duration_seconds?:number|null};
@@ -84,7 +85,7 @@ function ModerationQueue({onToast}:{onToast:(message:string)=>void}){
  return <div className="ecosystem-stack"><Header eyebrow="COMMUNITY CARE" title="Moderation queue" body="Review reports privately, preserve context, and record each resolution."/><div className="moderation-queue">{reports.map(report=><article className="report-card" key={report.id}><div className="report-card-head"><span className="admin-status">{report.status}</span><small>{new Date(report.created_at).toLocaleString()}</small></div><p className="report-target"><b>{report.author}</b> · {String(report.target_type).replace("community_","")} · {report.reason}</p><blockquote>{report.body}</blockquote>{report.details&&<p className="report-details">Reporter note: {report.details}</p>}<div className="report-actions">{report.status!=="reviewing"&&<button className="admin-action-btn" disabled={busy} onClick={()=>void update(report,"resolve_report","reviewing")}><Flag size={14}/> Start review</button>}<button className="admin-action-btn" disabled={busy} onClick={()=>void update(report,"resolve_report","resolved")}><Check size={14}/> Resolve</button><button className="admin-action-btn danger" disabled={busy} onClick={()=>void update(report,report.target_type==="community_post"?"moderate_post":"moderate_comment")}><EyeOff size={14}/> Hide content</button></div></article>)}{loaded&&!reports.length&&<div className="empty-state">No member reports are waiting for review.</div>}{busy&&<p className="glass-footnote"><RefreshCw size={14}/> Updating the moderation queue…</p>}<button className="glass-button" disabled={busy} onClick={()=>void load()}><RefreshCw size={14}/> Refresh queue</button></div></div>;
 }
 export default function SuperAppModule({page,userId,role,displayName,onToast,onNavigate}:Props){
- if(page==="Content Centre")return <ContentCentre userId={userId} onToast={onToast}/>;
+ if(page==="Content Centre")return <ContentDiscovery userId={userId} onToast={onToast}/>;
  if(page==="Share Studio")return <ShareStudio/>;
  if(page==="Content Studio")return <ContentStudio userId={userId} onToast={onToast}/>;
  if(page==="Knowledge")return <Knowledge/>;
