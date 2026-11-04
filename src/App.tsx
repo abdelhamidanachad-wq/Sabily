@@ -510,8 +510,7 @@ export default function App() {
     <main className="member-main">
       <header className="member-topbar"><div><span className="topbar-kicker">SABILY / {page.toUpperCase()}</span><h2>{page==="Home"?"Assalamu alaykum, "+(profile.display_name||"friend"):page==="Noor Wallet"?"Noor rewards":page}</h2></div><div className="topbar-right"><button className="noor-mini-pill" onClick={()=>setPage("Noor Wallet")}><Sparkles size={14}/> NOOR PREVIEW</button><NotificationCentre userId={user.id} onToast={showToast}/><button className="personalize-top-btn" onClick={()=>setPage("Personalize")} aria-label="Personalize Sabily"><Settings2 size={17}/></button><span className={supabaseReady?"backend-status live":"backend-status"}><i/>{supabaseReady?"Connected":"Offline setup"}</span><div className="avatar small-avatar">{(profile.display_name||"S").slice(0,1).toUpperCase()}</div></div></header>
       <div className="member-content">
-        {page==="Home"&&<div className="home-layout">\n          <DailyPracticeDashboard userId={user.id} onNavigate={setPage}/>
-          <section className="welcome-banner">
+        {page==="Home"&&<div className="home-layout">\n          <section className="welcome-banner">
             <div className="welcome-copy">
               <div className="banner-meta"><span><CalendarDays size={13}/>{todayHijri}</span><span><MapPin size={13}/>{profile.city}</span></div>
               <span className="eyebrow">A MOMENT FOR WHAT MATTERS</span>
@@ -526,6 +525,7 @@ export default function App() {
               <span className="photo-index">01 / 05</span>
             </div>
           </section>
+          <DailyPracticeDashboard userId={user.id} onNavigate={setPage}/>
           {homeWidgets.map(widget=>widget==="prayer"?<section className="home-widget" key="prayer"><div className="section-heading"><div><span className="eyebrow">TODAY</span><h3>Your day at a glance</h3></div><span className="date-chip">{todayHijri}</span></div><section className="prayer-card"><div className="prayer-card-head"><div><Clock3 size={18}/><b>Prayer times</b></div><span><MapPin size={13}/>{profile.city}, {countries[profile.country_code||"MA"]||""}</span></div>{nextPrayer&&<div className="home-next-prayer"><div><small>NEXT PRAYER</small><b>{nextPrayer.name} · {nextPrayer.time}</b></div><strong>{Math.floor(nextPrayer.minutesLeft/60)}h {nextPrayer.minutesLeft%60}m</strong></div>}{prayerTimes?<div className="prayer-grid">{prayerNames.map(n=><div className="prayer-time" key={n}><span className="prayer-time-icon">{n==="Fajr"||n==="Isha"?<MoonStar size={17}/>:<Sun size={17}/>}</span><small>{n}</small><b>{prayerTimes[n]||"—"}</b></div>)}</div>:<div className="prayer-loading">{prayerError||"Loading local prayer times…"}</div>}<div className="prayer-card-foot"><span>{prayerDate||("Calculated local timings · "+(prayerMethodLabels[prayerMethod]||"Custom"))}</span><button onClick={()=>loadPrayer(profile)}><RefreshCw size={14}/> Refresh</button></div></section></section>:widget==="quick"?<div className="quick-grid home-widget" key="quick">
               <button className="quick-photo-card quran-card" onClick={()=>setPage("Quran")}>
                 <img src="https://images.unsplash.com/photo-1649297711865-3d7c4de3610f?auto=format&fit=crop&w=900&q=85" alt="Reader studying an open Quran" loading="lazy"/>
