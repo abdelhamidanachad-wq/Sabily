@@ -461,3 +461,10 @@
 .discover-preferences small{grid-column:1/-1;color:var(--muted,#9ba99f);line-height:1.5}
 .discover-footer{text-align:center;color:var(--muted,#9ba99f);font-size:11px;padding:12px}
 @media(max-width:760px){.discover-item{grid-template-columns:1fr;gap:0}.discover-media{min-height:250px;max-height:56vh}.discover-preferences{grid-template-columns:1fr}.discover-header h1{font-size:32px}.discover-item-body{padding:16px}}
+
+
+/* Vertical, deliberate reel-like browsing without forced autoplay */
+.discover-feed{height:min(78vh,900px);overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:thin;padding-right:4px}
+.discover-item{scroll-snap-align:start;scroll-snap-stop:always;min-height:70vh;grid-template-columns:minmax(0,1fr) minmax(280px,.58fr)}
+.discover-item .discover-media{min-height:68vh;max-height:78vh}
+@media(max-width:760px){.discover-feed{height:76vh}.discover-item{min-height:72vh;grid-template-columns:1fr;grid-template-rows:minmax(250px,54vh) auto}.discover-item .discover-media{min-height:250px;max-height:54vh}.discover-item-body{max-height:34vh;overflow:auto}}
