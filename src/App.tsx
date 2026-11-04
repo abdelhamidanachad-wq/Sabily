@@ -32,38 +32,35 @@ const countries: Record<string,string> = {
 const countryOptions = Object.entries(countries);
 const nav = [
   { id:"Home", label:"Home", icon:Home },
+  { id:"Prayer", label:"Prayer times & tracker", icon:Clock3 },
   { id:"Worship", label:"Worship", icon:MoonStar },
-  { id:"Quran", label:"Quran", icon:BookOpen },
-  { id:"Tajweed", label:"Tajweed", icon:GraduationCap },
-  { id:"Hadith", label:"Hadith Nawawi", icon:BookHeart },
-  { id:"Tasbih", label:"Tasbih", icon:Activity },
-  { id:"Azkar", label:"Azkar", icon:MoonStar },
-  { id:"Noor Compute", label:"Noor Compute", icon:Cpu },
+  { id:"Quran", label:"Qur’an", icon:BookOpen },
+  { id:"Tajweed", label:"Tajweed learning", icon:GraduationCap },
+  { id:"Hadith", label:"Hadith", icon:BookHeart },
+  { id:"Azkar", label:"Adhkar", icon:MoonStar },
+  { id:"Tasbih", label:"Tasbih counter", icon:Activity },
+  { id:"Qibla", label:"Qibla", icon:Compass },
+  { id:"Calendar", label:"Islamic calendar", icon:CalendarDays },
+  { id:"Reminders", label:"Reminders", icon:Bell },
+  { id:"Knowledge", label:"Islamic knowledge", icon:BookOpen },
+  { id:"Quizzes", label:"Quizzes & games", icon:Brain },
   { id:"Communities", label:"Communities", icon:Users },
   { id:"Events", label:"Events & gatherings", icon:CalendarDays },
   { id:"Live Worship", label:"Live worship", icon:Radio },
-  { id:"Live Jumu'ah", label:"Live Jumu'ah", icon:Radio },
   { id:"Live Taraweeh", label:"Live Taraweeh", icon:MoonStar },
-  { id:"AI Companion", label:"AI Companion", icon:Sparkles },
-  { id:"Noor Wallet", label:"Noor rewards", icon:Wallet },
-  { id:"Sadaqa", label:"Sadaqa", icon:HandHeart },
-  { id:"Growth", label:"Growth planner", icon:Target },
-  { id:"Calendar", label:"Islamic calendar", icon:CalendarDays },
-  { id:"Reminders", label:"Reminders", icon:Bell },
-  { id:"Qibla", label:"Qibla", icon:Compass },
-  { id:"Content Centre", label:"Content centre", icon:Film },
+  { id:"Content Centre", label:"Content library", icon:Film },
   { id:"Share Studio", label:"Share cards", icon:Sparkles },
-  { id:"Knowledge", label:"Islamic knowledge", icon:BookOpen },
-  { id:"Quizzes", label:"Quizzes & games", icon:Brain },
+  { id:"AI Companion", label:"AI Companion", icon:Sparkles },
+  { id:"Noor Compute", label:"Noor Compute", icon:Cpu },
+  { id:"Noor Wallet", label:"Noor rewards", icon:Wallet },
+  { id:"Sadaqa", label:"Sadaqa & service", icon:HandHeart },
+  { id:"Growth", label:"Growth planner", icon:Target },
   { id:"Digital Wellbeing", label:"Digital wellbeing", icon:Heart },
-  { id:"Members", label:"Member levels", icon:Award },
   { id:"Mini Apps", label:"Mini apps", icon:LayoutDashboard },
-  { id:"Moderation", label:"Moderation", icon:ShieldAlert },
-  { id:"Content Studio", label:"AI content studio", icon:Sparkles },
-  { id:"Admin Studio", label:"Admin studio", icon:Settings2 },
-  { id:"Personalize", label:"Personalize", icon:Settings2 },
   { id:"Family", label:"Family space", icon:Users },
-  { id:"Profile", label:"Profile", icon:UserCircle2 }
+  { id:"Personalize", label:"Personalize", icon:Settings2 },
+  { id:"Profile", label:"Profile", icon:UserCircle2 },
+  { id:"Moderation", label:"Moderation", icon:ShieldAlert }
 ];
 const mobileNav = [
   { id:"Home", label:"Home", icon:Home },
@@ -73,13 +70,12 @@ const mobileNav = [
   { id:"Mini Apps", label:"More", icon:Ellipsis }
 ];
 const navGroups=[
- {label:"TODAY",ids:["Home","Prayer","Worship","Azkar","Tasbih","Qibla","Calendar","Reminders"]},
- {label:"GATHER",ids:["Events","Live Worship","Live Jumu'ah","Live Taraweeh"]},
- {label:"READ & LEARN",ids:["Quran","Tajweed","Hadith","Knowledge","Quizzes"]},
- {label:"COMMUNITY",ids:["Communities","Members","Content Centre","Share Studio"]},
- {label:"TOOLS",ids:["AI Companion","Noor Compute","Noor Wallet","Sadaqa","Growth","Digital Wellbeing","Mini Apps"]},
- {label:"MANAGE",ids:["Moderation","Content Studio","Admin Studio"]},
- {label:"ACCOUNT",ids:["Family","Personalize","Profile"]}
+ {label:"MY DAY",ids:["Home","Prayer","Worship","Azkar","Tasbih","Qibla","Calendar","Reminders"]},
+ {label:"LEARN",ids:["Quran","Tajweed","Hadith","Knowledge","Quizzes","Content Centre"]},
+ {label:"CONNECT",ids:["Communities","Events","Live Worship","Live Taraweeh"]},
+ {label:"TOOLS & GROWTH",ids:["AI Companion","Noor Compute","Noor Wallet","Sadaqa","Growth","Digital Wellbeing","Mini Apps","Share Studio"]},
+ {label:"MY SPACE",ids:["Family","Personalize","Profile"]},
+ {label:"COMMUNITY SAFETY",ids:["Moderation"]}
 ];
 const specialPagePaths:Record<string,string>={Worship:"/app/worship",Azkar:"/app/worship/azkar",Tasbih:"/app/worship/tasbih",Calendar:"/app/worship/calendar",Reminders:"/app/worship/reminders",Qibla:"/app/worship/qibla",Events:"/app/events","Live Worship":"/app/live","Live Jumu'ah":"/app/live/jummah","Live Taraweeh":"/app/live/taraweeh",Tajweed:"/app/learn/tajweed",Hadith:"/app/learn/hadith",Knowledge:"/app/learn/knowledge",Quizzes:"/app/learn/quizzes","AI Companion":"/app/tools/ai","Noor Compute":"/app/tools/compute","Noor Wallet":"/app/tools/wallet",Sadaqa:"/app/tools/sadaqa",Growth:"/app/tools/growth","Digital Wellbeing":"/app/tools/wellbeing","Share Studio":"/app/tools/share",Explore:"/app/tools/explore","Mini Apps":"/app/tools/explore","Content Centre":"/app/content","Content Studio":"/app/content/studio",Family:"/app/family","Admin Studio":"/app/admin-studio",Moderation:"/app/moderation",Admin:"/admin/overview"};
 const modulePageKeys:Record<string,string>={Quran:"module.quran",Prayer:"module.prayer",Worship:"module.prayer",Qibla:"module.qibla",Communities:"module.communities",Azkar:"module.azkar",Tasbih:"module.azkar","AI Companion":"module.ai",Reminders:"module.reminders","Noor Wallet":"module.wallet",Events:"module.events","Live Worship":"module.live","Live Jumu'ah":"module.live","Live Taraweeh":"module.live"};
@@ -104,23 +100,30 @@ function qiblaFrom(lat:number, lon:number) {
 }
 function PublicLanding({ onSignIn, onSignUp }: { onSignIn:()=>void; onSignUp:()=>void }) {
   const features = [
-    { icon:BookOpen, title:"Qur’an & learning", body:"Read the Qur’an and build a steady habit of learning, reflection and discovery." },
-    { icon:Clock3, title:"Prayer & daily rhythm", body:"Keep prayer times and meaningful daily practices close at hand." },
-    { icon:Compass, title:"Qibla direction", body:"Find the direction of the Kaaba with your device location, only when you allow it." },
-    { icon:Users, title:"Communities", body:"Meet people around shared interests, exchange encouragement and learn together." },
-    { icon:Heart, title:"Good deeds & growth", body:"Make space for personal growth, service and small actions that matter." },
-    { icon:ShieldCheck, title:"A thoughtful space", body:"A calmer digital experience built around faith, care and responsible community." }
+    { icon:Clock3, title:"Prayer & worship", body:"Prayer times, prayer tracking, Adhan preferences and daily worship tools." },
+    { icon:BookOpen, title:"Qur’an & recitation", body:"Qur’an reading, learning paths, Tajweed practice and reflection." },
+    { icon:MoonStar, title:"Adhkar & Tasbih", body:"Guided remembrance collections and a focused digital counter for everyday dhikr." },
+    { icon:Compass, title:"Qibla & Islamic calendar", body:"Daily utilities that connect local context with the wider Muslim calendar." },
+    { icon:GraduationCap, title:"Learning & knowledge", body:"Hadith, structured learning, quizzes and carefully reviewed educational content." },
+    { icon:Users, title:"Global communities", body:"Discover communities, meet people around shared interests and exchange encouragement." },
+    { icon:CalendarDays, title:"Events & live gatherings", body:"Find local learning, service and community events, with live worship schedules where available." },
+    { icon:HandHeart, title:"Sadaqa & service", body:"Turn good intentions into useful acts of care, generosity and community support." },
+    { icon:Target, title:"Personal growth", body:"Build a realistic plan, grow at your own pace and reflect on steady progress." },
+    { icon:Brain, title:"AI-supported assistance", body:"Optional tools for discovery and assistance, with safety limits and human review." },
+    { icon:Heart, title:"Family & wellbeing", body:"Create a shared family space and shape healthier digital habits." },
+    { icon:ShieldCheck, title:"Trust & governance", body:"Human review, source awareness, privacy-first defaults and community safety." }
   ];
   return <div className="public-home">
-    <header className="public-nav"><Brand/><nav><a href="#features">Features</a><a href="#about">Our approach</a></nav><div className="public-nav-actions"><button className="public-text-btn" onClick={onSignIn}>Sign in</button><button className="primary-btn" onClick={onSignUp}>Create account <ChevronRight size={16}/></button></div></header>
+    <header className="public-nav"><Brand/><nav><a href="#platform">The platform</a><a href="#mission">Our mission</a><a href="#governance">Trust & governance</a></nav><div className="public-nav-actions"><button className="public-text-btn" onClick={onSignIn}>Sign in</button><button className="primary-btn" onClick={onSignUp}>Create account <ChevronRight size={16}/></button></div></header>
     <main>
       <section className="public-hero">
-        <div className="public-hero-copy"><span className="eyebrow">ONE COMMUNITY. MANY PATHS TO GOOD.</span><h1>A better path,<br/><em>together.</em></h1><p>Faith, learning, personal growth and meaningful action — brought together in one welcoming space for Muslims everywhere.</p><div className="public-hero-actions"><button className="primary-btn" onClick={onSignUp}>Start your journey <ChevronRight size={17}/></button><button className="secondary-btn" onClick={onSignIn}>I already have an account</button></div><div className="public-verse">“And whoever does an atom's weight of good will see it.”<small>Qur'an 99:7 · Translation wording may vary</small></div></div>
+        <div className="public-hero-copy"><span className="eyebrow">A GLOBAL NON-PROFIT DIGITAL INITIATIVE</span><h1>Faith in action.<br/><em>Good for everyone.</em></h1><p>Sabily is a community-first digital platform bringing worship, knowledge, connection, wellbeing and service into one thoughtful place — built to help Muslims everywhere take their next good step.</p><div className="public-hero-actions"><button className="primary-btn" onClick={onSignUp}>Start your journey <ChevronRight size={17}/></button><button className="secondary-btn" onClick={onSignIn}>I already have an account</button></div><div className="public-verse">“And whoever does an atom's weight of good will see it.”<small>Qur'an 99:7 · Translation wording may vary</small></div></div>
         <div className="public-hero-art"><div className="public-orbit orbit-one"></div><div className="public-orbit orbit-two"></div><div className="public-emblem"><div className="brand-mark">S</div><strong>sabily</strong><small>A BETTER PATH, TOGETHER</small></div><div className="floating-note note-top"><MoonStar size={17}/> Faith & reflection</div><div className="floating-note note-bottom"><Heart size={17}/> Good deeds, every day</div></div>
       </section>
-      <section className="public-proof"><div><strong>One space</strong><span>for faith and everyday life</span></div><div><strong>Learn together</strong><span>at your own pace</span></div><div><strong>Grow with purpose</strong><span>one good step at a time</span></div></section>
-      <section className="public-features" id="features"><div className="public-section-head"><span className="eyebrow">WHAT YOU CAN DO</span><h2>Tools for a more intentional day.</h2><p>Start with the essentials and grow into a richer journey as Sabily evolves.</p></div><div className="public-feature-grid">{features.map(({icon:Icon,title,body})=><article className="public-feature-card" key={title}><div className="public-feature-icon"><Icon size={21}/></div><h3>{title}</h3><p>{body}</p></article>)}</div></section>
-      <section className="public-approach" id="about"><div><span className="eyebrow">OUR APPROACH</span><h2>Technology should support what matters.</h2></div><p>Sabily is designed to encourage learning, worship, connection and service — without turning your attention into a commodity. We aim for a calmer, more useful digital space, with care for sources, privacy and people.</p></section>
+      <section className="public-proof"><div><strong>Worship</strong><span>make room for daily practice</span></div><div><strong>Knowledge</strong><span>learn with care and context</span></div><div><strong>Community</strong><span>connect through shared good</span></div><div><strong>Service</strong><span>turn values into action</span></div></section>
+      <section className="public-features" id="platform"><div className="public-section-head"><span className="eyebrow">ONE CONNECTED ECOSYSTEM</span><h2>More than an app. A shared digital home.</h2><p>Explore worship, learning, daily tools, family, wellbeing, community, gatherings and service.</p></div><div className="public-feature-grid">{features.map(({icon:Icon,title,body})=><article className="public-feature-card" key={title}><div className="public-feature-icon"><Icon size={21}/></div><h3>{title}</h3><p>{body}</p></article>)}</div></section>
+      <section className="public-approach" id="mission"><div><span className="eyebrow">OUR APPROACH</span><h2>Technology in service of people, not the other way around.</h2></div><p>Sabily is being shaped as a mission-led, non-profit-oriented digital initiative: to make useful Islamic learning, everyday worship tools, positive connection and opportunities for good deeds accessible to Muslims everywhere. Legal non-profit status and governance structures will be communicated accurately as they are established.</p></section>
+      <section className="public-approach" id="governance"><div><span className="eyebrow">TRUST BY DESIGN</span><h2>Careful sources. Human oversight. Respect for privacy.</h2></div><p>Religious material is treated with source and rights awareness. AI-assisted drafts are not published automatically. Moderation and access permissions are built into the platform, while personal data and account controls remain under the user’s control.</p></section>
       <section className="public-cta"><div><span className="eyebrow">YOUR NEXT GOOD STEP</span><h2>Begin your journey with Sabily.</h2><p>Create an account and make this space your own.</p></div><button className="primary-btn" onClick={onSignUp}>Create your free account <ChevronRight size={17}/></button></section>
     </main>
     <footer className="public-footer"><Brand/><span>Built with care. Shared for the sake of good.</span><button className="public-text-btn" onClick={onSignIn}>Sign in</button></footer>
@@ -452,7 +455,7 @@ export default function App() {
   const isModerator=isAdmin||user?.role==="moderator";
   const isCreator=isAdmin||user?.role==="creator";
   const moduleEnabled=(id:string)=>{const key=modulePageKeys[id];return !key||moduleSettings[key]?.enabled!==false;};
-  const visibleNav=nav.filter(item=>moduleEnabled(item.id)&&(item.id!=="Admin Studio"||isAdmin)&&(item.id!=="Content Studio"||isCreator)&&(item.id!=="Moderation"||isModerator));
+  const visibleNav=nav.filter(item=>moduleEnabled(item.id)&&(item.id!=="Moderation"||isModerator));
   const visibleNavGroups=navGroups.map(group=>({...group,items:group.ids.map(id=>visibleNav.find(item=>item.id===id)).filter(Boolean) as typeof nav})).filter(group=>group.items.length>0);
   const direction=profile?.locale==="ar"?"rtl":"ltr";
   const savePreferences=async(nextTheme=theme,nextWidgets=homeWidgets)=>{if(!user)return;const payload={theme:nextTheme,homeWidgets:nextWidgets,goal:mainGoal,minutes:dailyMinutes};localStorage.setItem("sabily-ui-"+user.id,JSON.stringify(payload));if(supabase)await supabase.auth.updateUser({data:{sabily_preferences:payload,sabily_goal:mainGoal,sabily_daily_minutes:dailyMinutes}});};
