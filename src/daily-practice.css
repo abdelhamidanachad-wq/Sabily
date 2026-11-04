@@ -1,3 +1,24 @@
+
+/* Desktop app shell: independent sidebar and page scroll, with a full-width content canvas. */
+@media (min-width: 761px) {
+  html, body, #root { width:100%; min-height:100%; }
+  body { overflow:hidden; }
+  .member-app { display:block !important; position:relative; width:100%; height:100dvh; min-height:0 !important; overflow:hidden !important; }
+  .member-sidebar { position:fixed !important; inset:0 auto 0 0 !important; width:314px !important; height:100dvh !important; max-height:100dvh !important; min-height:0 !important; overflow-x:hidden !important; overflow-y:auto !important; display:flex !important; flex-direction:column; }
+  .member-sidebar nav { flex:1 1 auto; min-height:0; overflow:visible !important; }
+  .member-main { display:flex; flex-direction:column; margin:0 0 0 314px !important; width:calc(100% - 314px) !important; height:100dvh !important; min-height:0 !important; min-width:0 !important; overflow-x:hidden !important; overflow-y:auto !important; }
+  .member-topbar { position:sticky !important; top:0; flex:none; }
+  .member-content { width:100% !important; max-width:1480px !important; min-width:0 !important; margin:0 auto !important; padding-left:clamp(20px,3vw,48px) !important; padding-right:clamp(20px,3vw,48px) !important; }
+  .home-layout { width:100%; min-width:0; }
+  .daily-practice { width:100%; min-width:0; grid-column:1 / -1; }
+  .member-footer { flex:none; }
+}
+@media (max-width: 760px) {
+  .member-app { height:auto !important; min-height:100dvh; overflow:visible !important; }
+  .member-main { width:100% !important; min-width:0; height:auto !important; min-height:100dvh; margin:0 !important; overflow:visible !important; }
+  .member-content { width:100% !important; max-width:none !important; }
+  .daily-practice { width:100%; min-width:0; }
+}
 /* Sabily daily-life redesign: fixed app shell, Islamic geometry and calm habit surfaces. */
 @media (min-width: 761px) {\n  .home-layout > .daily-practice { grid-column: 1 / -1; }\n  .member-sidebar nav { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: rgba(194,220,177,.22) transparent; }
   html, body, #root { min-height: 100%; }
@@ -134,3 +155,34 @@
   .public-attention-story .public-story-image { order:2; }
   .public-story-image,.public-story-image img { min-height:250px; height:250px; }
 }
+
+/* Public home: real community and mosque event discovery. */
+.public-nav nav { flex-wrap:wrap; }
+.public-global-connect,.public-world-events { max-width:1200px; margin:0 auto; padding:clamp(54px,7vw,92px) 24px; }
+.public-global-connect { border-top:1px solid rgba(211,232,194,.1); }
+.public-community-grid,.public-event-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; margin-top:28px; }
+.public-community-card,.public-event-card { min-width:0; overflow:hidden; border:1px solid rgba(211,232,194,.15); border-radius:19px; background:linear-gradient(145deg,rgba(20,55,40,.78),rgba(7,27,20,.88)); }
+.public-community-card { display:flex; flex-direction:column; align-items:flex-start; padding:19px; min-height:220px; }
+.public-community-symbol { width:42px; height:42px; display:grid; place-items:center; margin-bottom:17px; border:1px solid rgba(205,229,185,.2); border-radius:13px; background:rgba(195,226,156,.1); color:#d7edaa; }
+.public-community-card>small { color:#c4df9b; font-size:9px; text-transform:uppercase; letter-spacing:.1em; }
+.public-community-card h3,.public-event-body h3 { margin:8px 0; color:#f0f5eb; font:600 18px Georgia,serif; }
+.public-community-card p,.public-event-body p { margin:0; color:#9fb8a8; font-size:11px; line-height:1.65; }
+.public-community-place { display:flex; align-items:center; gap:6px; margin-top:auto; padding-top:15px; color:#c3d7c5; font-size:10px; }
+.public-event-card { display:flex; flex-direction:column; }
+.public-event-art { height:155px; position:relative; overflow:hidden; }
+.public-event-art:after { content:""; position:absolute; inset:35% 0 0; background:linear-gradient(transparent,rgba(3,18,13,.72)); }
+.public-event-art img { width:100%; height:100%; object-fit:cover; display:block; }
+.public-event-art>span,.public-event-live { position:absolute; z-index:1; top:12px; left:12px; border:1px solid rgba(235,245,224,.25); border-radius:99px; padding:6px 9px; background:rgba(5,27,19,.76); color:#eff5e9; font-size:9px; }
+.public-event-live { left:auto; right:12px; display:flex; align-items:center; gap:6px; color:#fff; }
+.public-event-live i { width:6px; height:6px; border-radius:50%; background:#ff746d; }
+.public-event-body { display:flex; flex:1; flex-direction:column; align-items:flex-start; padding:16px; }
+.public-event-body time { color:#c6e59d; font-size:10px; }
+.public-event-body h3 { font-size:17px; }
+.public-event-body small { display:flex; align-items:center; gap:6px; margin-top:auto; padding-top:14px; color:#b7cbbd; font-size:10px; }
+.public-live-empty { display:flex; align-items:flex-start; gap:14px; margin-top:25px; padding:22px; border:1px dashed rgba(211,232,194,.23); border-radius:17px; color:#c8e7a1; background:rgba(221,240,207,.035); }
+.public-live-empty div { display:grid; gap:5px; }
+.public-live-empty b { color:#edf4e9; font-size:13px; }
+.public-live-empty span { color:#9fb8a8; font-size:11px; line-height:1.6; }
+.public-section-action { display:flex; justify-content:flex-start; margin-top:22px; }
+@media(max-width:1000px) { .public-community-grid,.public-event-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media(max-width:600px) { .public-global-connect,.public-world-events { padding:44px 18px; } .public-community-grid,.public-event-grid { grid-template-columns:1fr; } .public-nav nav { display:none; } }
