@@ -3,7 +3,7 @@ import {
   Home, BookOpen, Clock3, Compass, Users, UserCircle2, LogOut, Plus,
   Send, MapPin, MoonStar, Sun, Globe2, Heart, MessageCircle, ShieldCheck,
   Search, ChevronLeft, ChevronRight, RefreshCw, X, Sparkles, Menu,
-  Activity, BookHeart, CalendarDays, Wallet, HandHeart, Target, Bell, GraduationCap, Brain, Film, ShieldAlert, Award, LayoutDashboard, Settings2, Cpu, Ellipsis, Radio
+  Activity, BookHeart, CalendarDays, Wallet, HandHeart, Target, Bell, Users, GraduationCap, Brain, Film, ShieldAlert, Award, LayoutDashboard, Settings2, Cpu, Ellipsis, Radio
 } from "lucide-react";
 import { supabase, supabaseReady, getSabilyRole, type SabilyRole } from "./supabase";
 import AdminWorkspace from "./AdminWorkspace";
@@ -62,6 +62,7 @@ const nav = [
   { id:"Content Studio", label:"AI content studio", icon:Sparkles },
   { id:"Admin Studio", label:"Admin studio", icon:Settings2 },
   { id:"Personalize", label:"Personalize", icon:Settings2 },
+  { id:"Family", label:"Family space", icon:Users },
   { id:"Profile", label:"Profile", icon:UserCircle2 }
 ];
 const mobileNav = [
@@ -78,9 +79,9 @@ const navGroups=[
  {label:"COMMUNITY",ids:["Communities","Members","Content Centre","Share Studio"]},
  {label:"TOOLS",ids:["AI Companion","Noor Compute","Noor Wallet","Sadaqa","Growth","Digital Wellbeing","Mini Apps"]},
  {label:"MANAGE",ids:["Moderation","Content Studio","Admin Studio"]},
- {label:"ACCOUNT",ids:["Personalize","Profile"]}
+ {label:"ACCOUNT",ids:["Family","Personalize","Profile"]}
 ];
-const specialPagePaths:Record<string,string>={Worship:"/app/worship",Azkar:"/app/worship/azkar",Tasbih:"/app/worship/tasbih",Calendar:"/app/worship/calendar",Reminders:"/app/worship/reminders",Qibla:"/app/worship/qibla",Events:"/app/events","Live Worship":"/app/live","Live Jumu'ah":"/app/live/jummah","Live Taraweeh":"/app/live/taraweeh",Tajweed:"/app/learn/tajweed",Hadith:"/app/learn/hadith",Knowledge:"/app/learn/knowledge",Quizzes:"/app/learn/quizzes","AI Companion":"/app/tools/ai","Noor Compute":"/app/tools/compute","Noor Wallet":"/app/tools/wallet",Sadaqa:"/app/tools/sadaqa",Growth:"/app/tools/growth","Digital Wellbeing":"/app/tools/wellbeing","Share Studio":"/app/tools/share",Explore:"/app/tools/explore","Mini Apps":"/app/tools/explore","Content Centre":"/app/content","Content Studio":"/app/content/studio","Admin Studio":"/app/admin-studio",Moderation:"/app/moderation",Admin:"/admin/overview"};
+const specialPagePaths:Record<string,string>={Worship:"/app/worship",Azkar:"/app/worship/azkar",Tasbih:"/app/worship/tasbih",Calendar:"/app/worship/calendar",Reminders:"/app/worship/reminders",Qibla:"/app/worship/qibla",Events:"/app/events","Live Worship":"/app/live","Live Jumu'ah":"/app/live/jummah","Live Taraweeh":"/app/live/taraweeh",Tajweed:"/app/learn/tajweed",Hadith:"/app/learn/hadith",Knowledge:"/app/learn/knowledge",Quizzes:"/app/learn/quizzes","AI Companion":"/app/tools/ai","Noor Compute":"/app/tools/compute","Noor Wallet":"/app/tools/wallet",Sadaqa:"/app/tools/sadaqa",Growth:"/app/tools/growth","Digital Wellbeing":"/app/tools/wellbeing","Share Studio":"/app/tools/share",Explore:"/app/tools/explore","Mini Apps":"/app/tools/explore","Content Centre":"/app/content","Content Studio":"/app/content/studio",Family:"/app/family","Admin Studio":"/app/admin-studio",Moderation:"/app/moderation",Admin:"/admin/overview"};
 const modulePageKeys:Record<string,string>={Quran:"module.quran",Prayer:"module.prayer",Worship:"module.prayer",Qibla:"module.qibla",Communities:"module.communities",Azkar:"module.azkar",Tasbih:"module.azkar","AI Companion":"module.ai",Reminders:"module.reminders","Noor Wallet":"module.wallet",Events:"module.events","Live Worship":"module.live","Live Jumu'ah":"module.live","Live Taraweeh":"module.live"};
 function routeForPage(page:string){return specialPagePaths[page]||"/app/"+page.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"");}
 function pageForRoute(path:string){if(path.startsWith("/admin"))return "Admin";const known=[...nav.map(item=>item.id),"Explore"];return known.find(page=>routeForPage(page)===path)||"Home";}
