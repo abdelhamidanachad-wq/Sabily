@@ -3,7 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 const url = import.meta.env.VITE_SUPABASE_URL as string | undefined;
 const key = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
 
-export const supabaseReady = Boolean(url && key && !url.includes("YOUR_PROJECT"));
+export const supabaseReady = Boolean(url && key && url.startsWith("https://") && !url.includes("YOUR_PROJECT") && !key.includes("YOUR_SUPABASE"));
 export const supabase = supabaseReady
   ? createClient(url!, key!, {
       auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
