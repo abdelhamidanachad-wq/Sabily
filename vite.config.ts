@@ -5,11 +5,18 @@ export default defineConfig(({ mode }) => {
   // Bridge only public Supabase URL and anon/publishable keys.
   // Never expose service-role or other secrets to the browser.
   const env = loadEnv(mode, process.cwd(), "");
-  const publicSupabaseUrl = env.VITE_SUPABASE_URL || env.SUPABASE_URL || "";
+  const publicSupabaseUrl =
+    env.VITE_SUPABASE_URL ||
+    env.NEXT_PUBLIC_SUPABASE_URL ||
+    env.SUPABASE_URL ||
+    "";
   const publicSupabaseKey =
     env.VITE_SUPABASE_ANON_KEY ||
+    env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
     env.SUPABASE_ANON_KEY ||
     env.SUPABASE_PUBLISHABLE_KEY ||
+    env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+    env.SUPABASE_PUBLIC_KEY ||
     "";
 
   return {
