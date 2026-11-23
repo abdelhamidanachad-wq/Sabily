@@ -158,3 +158,4 @@ OAuth client secrets and AI provider keys must remain in Supabase Auth / Edge Fu
 - `sabily_affiliate_partners`
 
 All new user activity tables use Row Level Security and user-scoped policies. The matching SQL is in `supabase/migrations/20261101135000_sabily_superapp_quiz_wellbeing_affiliates.sql`.
+\n\n### Supabase/Vercel environment variable compatibility\n\nThe build safely maps the Supabase integration's public `SUPABASE_URL`, `SUPABASE_ANON_KEY`, or `SUPABASE_PUBLISHABLE_KEY` into the Vite client variables. It does not expose service-role or secret keys. Explicit `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` remain supported.\n
