@@ -8,7 +8,7 @@ The approved V2 architecture, language scope, mobile strategy, Discover creator 
 
 # Sabily — Global Muslim Community MVP
 
-Sabily is a mobile-first, installable web app for faith, learning, community and service. This repository is the source of truth for the current MVP. The active implementation branch is `mvp/working-pwa` while the draft pull request is validated.
+Sabily is a mobile-first, installable web app for faith, learning, community and service. This repository is the source of truth for the current MVP. The active implementation and deployment source is `main`.
 
 ## Current stack
 
@@ -63,7 +63,7 @@ Never commit `.env.local`, Supabase service-role/secret keys, AI provider keys, 
 
 ## Supabase backend
 
-The active MVP backend is the dedicated Supabase project `SABILY` (`vkjtievnxxiuoiptzxii`) in `eu-central-1`. The earlier `le-shift` project (`xxsyidandcqxwsbuhskp`) is a separate legacy workspace and is not the target for this app.
+The current Supabase backend is the dedicated project `Sabily` (`sjwdjdjtntzuakevtglq`) in `eu-west-3` (Paris). Use this project for the current rebuild. Do not use older project references from historical branches.
 
 The reproducible MVP migrations are:
 - `20261101014112_sabily_mvp_core_auth_communities.sql` — profiles, server-managed roles, community tables, RLS policies and Auth signup trigger.
@@ -86,11 +86,11 @@ Project: `sabily-app`
 - Build command: `npm run build`
 - Output directory: `dist`
 
-Required environment variables are configured on the Vercel project:
+The production project should have these environment variables configured (verify them in Vercel Settings → Environment Variables):
 - `VITE_SUPABASE_URL`
 - `VITE_SUPABASE_ANON_KEY`
 
-Vercel preview/production deployments still need to be verified after the MVP branch is merged or deployed. If Vercel Authentication protects a preview URL, sign in to the Vercel team or use an approved share link.
+The existing production deployment is visible in the Vercel dashboard; verify its backend connection after any environment-variable changes. If Vercel Authentication protects a preview URL, sign in to the Vercel team or use an approved share link.
 
 ## Install as a PWA
 
